@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/utility/constants.dart';
 
@@ -33,7 +35,7 @@ class InputField extends StatelessWidget {
       decoration: InputDecoration(
         fillColor: Colors.grey.shade200,
         prefixIcon: Icon(
-          Icons.mail,
+         icon
         ),
         hintStyle: paragraph,
         label: Text(label),

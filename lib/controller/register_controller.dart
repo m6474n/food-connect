@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,7 @@ class RegisterProvider with ChangeNotifier{
   FirebaseAuth auth  = FirebaseAuth.instance;
    bool _isLoading = false;
   bool get isLoading => _isLoading;
-  DatabaseReference databaseRef = FirebaseDatabase.instance.ref('Users');
-
+ final dbRef = FirebaseFirestore.instance.collection('Users');
   void setLoading (bool value){
     _isLoading = value;
     notifyListeners();
@@ -21,19 +21,24 @@ class RegisterProvider with ChangeNotifier{
 
   void signup(BuildContext context, String name,String email,String password){
       setLoading(true);
+
+
     auth.createUserWithEmailAndPassword(email: email, password: password).then((value){
       setLoading(false);
+      // final user =  auth.currentUser
+      final id = DateTime.now().millisecondsSinceEpoch.toString();
+      dbRef.doc(id).set({
+        'id': id,
+        'profile': '',
+        'name': name,
+        'email':email,
+        'password': password.toString(),
+        'location': '',
+        'phone': ''
+      });
+
       Navigator.pushNamed(context, RouteName.homeScreen);
 
-      databaseRef.child(value.user!.uid.toString()).set({
-        'id': value.user!.uid.toString(),
-        'name': name,
-        'email': email,
-        'password': password,
-        'image': ''
-
-
-      });
 
 
       Utils.toastMessage('User Created Successfully', Colors.green);

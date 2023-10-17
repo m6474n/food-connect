@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //
-
+ValueNotifier<bool> toggle = ValueNotifier(true);
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -89,82 +89,84 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                 ),
 
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                PasswordField(
-                                  controller: passController,
-                                  focusNode: passNode,
-                                  validator: (value) {
-                                    return value.isEmpty
-                                        ? 'Enter Password'
-                                        : null;
-                                  },
-                                  label: 'Password',
-                                  keyboardType: TextInputType.visiblePassword,
-                                  icon: Icons.lock,
-                                ),
-                                //
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: TextButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, RouteName.loginScreen);
-                                      },
-                                      child: Text(
-                                        "Forget Password ?",
-                                        style: paragraph.copyWith(
-                                            color: mainColor),
-                                      )),
-                                ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  PasswordField(
 
-                                const SizedBox(
-                                  height: 32,
-                                ),
-                                GradientButton(
-                                    label: 'Login',
-                                    onPress: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        return value.Login(
-                                            context,
-                                            emailController.text,
-                                            passController.text);
-                                      }
+                                    obscure: toggle.value,
+                                    controller: passController,
+                                    focusNode: passNode,
+                                    validator: (value) {
+                                      return value.isEmpty
+                                          ? 'Enter Password'
+                                          : null;
                                     },
-                                    loading: value.isLoading)
-                              ],
-                            ),
-                          ));
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account?",
-                      style: paragraph,
+                                    label: 'Password',
+                                    keyboardType: TextInputType.visiblePassword,
+                                    icon: Icons.lock,
+                                  ),
+                                  //
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: TextButton(
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, RouteName.loginScreen);
+                                        },
+                                        child: Text(
+                                          "Forget Password ?",
+                                          style: paragraph.copyWith(
+                                              color: mainColor),
+                                        )),
+                                  ),
+
+                                  const SizedBox(
+                                    height: 32,
+                                  ),
+                                  GradientButton(
+                                      label: 'Login',
+                                      onPress: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          return value.Login(
+                                              context,
+                                              emailController.text,
+                                              passController.text);
+                                        }
+                                      },
+                                      loading: value.isLoading)
+                                ],
+                              ),
+                            ));
+                      },
                     ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                              context, RouteName.registerScreen);
-                        },
-                        child: Text(
-                          "Register.",
-                          style: paragraph.copyWith(color: mainColor),
-                        ))
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account?",
+                        style: paragraph,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, RouteName.registerScreen);
+                          },
+                          child: Text(
+                            "Register.",
+                            style: paragraph.copyWith(color: mainColor),
+                          ))
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
     );
   }
 }

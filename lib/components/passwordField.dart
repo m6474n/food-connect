@@ -9,14 +9,16 @@ class PasswordField extends StatelessWidget {
     required this.keyboardType,
     required this.icon,
     required this.label,
-    this.obscure = false,
+    required this.obscure,
+
     Key? key,
   }) : super(key: key);
+
+
 
   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
   final IconData icon;
-
   final String label;
   final bool obscure;
   final FormFieldValidator validator;
@@ -33,9 +35,9 @@ class PasswordField extends StatelessWidget {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         fillColor: Colors.grey.shade200,
-        suffixIcon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
+        suffixIcon: Icon( Icons.visibility_off),
         prefixIcon: Icon(
-          Icons.mail,
+          icon,
         ),
         hintStyle: paragraph,
         label: Text(label),

@@ -5,4 +5,8 @@ class RouteName{
     static const String welcomScreen = 'welcome';
     static const String boardingScreen = 'boarding';
     static const String homeScreen = 'home';
+    static const String chatScreen = 'chat';
+    static const String mapScreen = 'map';
+    static const String donationScreen = 'donation';
+    static const String profileScreen   = 'profile';
 }
