@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +13,10 @@ class AddPost extends StatefulWidget {
 }
 
 class _AddPostState extends State<AddPost> {
-
   final db = FirebaseFirestore.instance.collection('posts');
-final auth  = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance;
   final postController = TextEditingController();
   final postNode = FocusNode();
-
 
   @override
   void dispose() {
@@ -29,11 +25,12 @@ final auth  = FirebaseAuth.instance;
     postNode.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Post'),
+        title: Text('Add Post Screen'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -47,22 +44,26 @@ final auth  = FirebaseAuth.instance;
                 validator: (value) {},
                 focusNode: postNode,
                 icon: Icons.keyboard,
-                label: 'Type Anything')
-          ,SizedBox(height: 20,),RoundedButton(label: 'Add Post', bgColor: mainColor, onPress: (){
-
-            db.doc(DateTime.now().millisecondsSinceEpoch.toString()).set({
-             'id': DateTime.now().millisecondsSinceEpoch.toString(),
-              'message': postController.text
-
-            }).then((value){
-              print('Post Added Successfully!');
-              postController.clear();
-            }).onError((error, stackTrace) {
-              print('Something went wrong!');
-            });
-
-
-            }, labelColor: Colors.white, loading: false)
+                label: 'Type Anything'),
+            SizedBox(
+              height: 20,
+            ),
+            RoundedButton(
+                label: 'Add Post',
+                bgColor: mainColor,
+                onPress: () {
+                  db.doc(DateTime.now().millisecondsSinceEpoch.toString()).set({
+                    'id': DateTime.now().millisecondsSinceEpoch.toString(),
+                    'message': postController.text
+                  }).then((value) {
+                    print('Post Added Successfully!');
+                    postController.clear();
+                  }).onError((error, stackTrace) {
+                    print('Something went wrong!');
+                  });
+                },
+                labelColor: Colors.white,
+                loading: false)
           ],
         ),
       ),
