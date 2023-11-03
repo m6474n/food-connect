@@ -1,7 +1,10 @@
 
+
+
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/views/boarding_screen.dart';
+import 'package:food_donation_app/views/emailValidation.dart';
 import 'package:food_donation_app/views/home_page.dart';
 import 'package:food_donation_app/views/login.dart';
 import 'package:food_donation_app/views/register.dart';
@@ -20,7 +23,6 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case RouteName.loginScreen:
         return MaterialPageRoute(builder: (_) =>  LoginScreen());
-
       case RouteName.registerScreen:
         return MaterialPageRoute(builder: (_) =>  RegisterScreen());
       case RouteName.welcomScreen:
@@ -37,6 +39,8 @@ class Routes {
         return MaterialPageRoute(builder: (_)=> const DonationScreen());
       case RouteName.profileScreen:
         return MaterialPageRoute(builder: (_)=> const ProfileScreen());
+        case RouteName.validationScreen:
+        return MaterialPageRoute(builder: (_)=> const ValidationScreen());
 
 
       default:

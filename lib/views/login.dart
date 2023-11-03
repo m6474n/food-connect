@@ -35,11 +35,15 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+
   //
-ValueNotifier<bool> toggle = ValueNotifier(true);
+ValueNotifier<bool> toggle = ValueNotifier<bool>(true);
+late  bool _passVisible = false;
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LoginProvider>(context, listen:  true);
     final mq = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Center(
@@ -69,78 +73,148 @@ ValueNotifier<bool> toggle = ValueNotifier(true);
                 const SizedBox(
                   height: 40,
                 ),
-                ChangeNotifierProvider(
-                  create: (_) => LoginProvider(),
-                  child: Consumer<LoginProvider>(
-                    builder: (context, value, child) {
-                      return Form(
-                          key: _formKey,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                InputField(
-                                  label: 'Email',
-                                  keyboardType: TextInputType.emailAddress,
-                                  controller: emailController,
-                                  focusNode: emailNode,
-                                  icon: Icons.mail,
+           Form(
+                        key: _formKey,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              InputField(
+                                label: 'Email',
+                                keyboardType: TextInputType.emailAddress,
+                                controller: emailController,
+                                focusNode: emailNode,
+                                icon: Icons.mail,
+                                validator: (value) {
+                                  return value.isEmpty ? 'Enter Email' : null;
+                                },
+                              ),
+
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                PasswordField(
+                                  
+                              
+                                  controller: passController,
+                                  focusNode: passNode,
                                   validator: (value) {
-                                    return value.isEmpty ? 'Enter Email' : null;
+                                    return value.isEmpty
+                                        ? 'Enter Password'
+                                        : null;
                                   },
+                                  label: 'Password',
+                                  keyboardType: TextInputType.visiblePassword,
+                                 
+                                ),
+                                //
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, RouteName.loginScreen);
+                                      },
+                                      child: Text(
+                                        "Forget Password ?",
+                                        style: paragraph.copyWith(
+                                            color: mainColor),
+                                      )),
                                 ),
 
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  PasswordField(
-
-                                    obscure: toggle.value,
-                                    controller: passController,
-                                    focusNode: passNode,
-                                    validator: (value) {
-                                      return value.isEmpty
-                                          ? 'Enter Password'
-                                          : null;
+                                const SizedBox(
+                                  height: 32,
+                                ),
+                                GradientButton(
+                                    label: 'Login',
+                                    onPress: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        return provider.Login(
+                                            context,
+                                            emailController.text,
+                                            passController.text);
+                                      }
                                     },
-                                    label: 'Password',
-                                    keyboardType: TextInputType.visiblePassword,
-                                    icon: Icons.lock,
-                                  ),
-                                  //
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, RouteName.loginScreen);
-                                        },
-                                        child: Text(
-                                          "Forget Password ?",
-                                          style: paragraph.copyWith(
-                                              color: mainColor),
-                                        )),
-                                  ),
+                                    loading: provider.isLoading)
+                              ],
+                            ),
 
-                                  const SizedBox(
-                                    height: 32,
-                                  ),
-                                  GradientButton(
-                                      label: 'Login',
-                                      onPress: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          return value.Login(
-                                              context,
-                                              emailController.text,
-                                              passController.text);
-                                        }
-                                      },
-                                      loading: value.isLoading)
-                                ],
-                              ),
-                            ));
-                      },
-                    ),
-                  ),
+                // ChangeNotifierProvider(
+                //   create: (_) => LoginProvider(),
+                //   child: Consumer<LoginProvider>(
+                //     builder: (context, value, child) {
+                //       return Form(
+                //           key: _formKey,
+                //           child: Center(
+                //             child: Column(
+                //               children: [
+                //                 InputField(
+                //                   label: 'Email',
+                //                   keyboardType: TextInputType.emailAddress,
+                //                   controller: emailController,
+                //                   focusNode: emailNode,
+                //                   icon: Icons.mail,
+                //                   validator: (value) {
+                //                     return value.isEmpty ? 'Enter Email' : null;
+                //                   },
+                //                 ),
+                //
+                //                 const SizedBox(
+                //                   height: 16,
+                //                 ),
+                //                 PasswordField(
+                //                   ontap: (){
+                //                     setState(() {
+                //                       _passVisible = !_passVisible;
+                //                     });
+                //                   },
+                //                   obscure: _passVisible,
+                //                   controller: passController,
+                //                   focusNode: passNode,
+                //                   validator: (value) {
+                //                     return value.isEmpty
+                //                         ? 'Enter Password'
+                //                         : null;
+                //                   },
+                //                   label: 'Password',
+                //                   keyboardType: TextInputType.visiblePassword,
+                //                   icon: Icons.lock, visibility: toggle == true ? Icons.visibility_off : Icons.visibility,
+                //                 ),
+                //                 //
+                //                 Align(
+                //                   alignment: Alignment.centerRight,
+                //                   child: TextButton(
+                //                       onPressed: () {
+                //                         Navigator.pushNamed(
+                //                             context, RouteName.loginScreen);
+                //                       },
+                //                       child: Text(
+                //                         "Forget Password ?",
+                //                         style: paragraph.copyWith(
+                //                             color: mainColor),
+                //                       )),
+                //                 ),
+                //
+                //                 const SizedBox(
+                //                   height: 32,
+                //                 ),
+                //                 GradientButton(
+                //                     label: 'Login',
+                //                     onPress: () {
+                //                       if (_formKey.currentState!.validate()) {
+                //                         return value.Login(
+                //                             context,
+                //                             emailController.text,
+                //                             passController.text);
+                //                       }
+                //                     },
+                //                     loading: value.isLoading)
+                //               ],
+                //             ),
+                //           ));
+                //     },
+                //   ),
+                // ),
+                        ),),
                   SizedBox(
                     height: 10,
                   ),

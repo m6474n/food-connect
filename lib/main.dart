@@ -1,10 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:food_donation_app/controller/login_controller.dart';
+import 'package:food_donation_app/controller/register_controller.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/routes/routes.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:food_donation_app/views/add_post.dart';
+import 'package:food_donation_app/views/emailValidation.dart';
 
 import 'package:food_donation_app/views/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +23,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_)=> LoginProvider()),
+      ChangeNotifierProvider(create: (_)=> RegisterProvider()),
+      // ChangeNotifierProvider(create: create)
+
+    ],child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -27,6 +37,6 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       initialRoute: RouteName.splashScreen,
       onGenerateRoute: Routes.generateRoute,
-    );
+    ),);
   }
 }

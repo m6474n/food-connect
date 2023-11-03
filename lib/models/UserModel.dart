@@ -1,0 +1,21 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+
+class UserModel {
+  final String? id;
+  final String? name;
+  final String? email;
+  final String? phone;
+  final String? image;
+  final String? address;
+  final String? pass;
+
+  UserModel(this.name, this.id, this.email, this.phone, this.image,
+      this.address, this.pass);
+
+  toJson(){
+    return {'Name': name, 'Email': email, 'Phone' : phone, 'Address': address, 'image':image, 'password': pass
+    };}
+
+}

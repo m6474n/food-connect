@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/utility/constants.dart';
 
-class PasswordField extends StatelessWidget {
+class PasswordField extends StatefulWidget {
   PasswordField({
     required this.controller,
     required this.validator,
     required this.focusNode,
     required this.keyboardType,
-    required this.icon,
     required this.label,
-    required this.obscure,
+
 
     Key? key,
   }) : super(key: key);
@@ -18,29 +17,45 @@ class PasswordField extends StatelessWidget {
 
   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
-  final IconData icon;
   final String label;
-  final bool obscure;
   final FormFieldValidator validator;
   final TextInputType keyboardType;
+
+
+  @override
+  State<PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  late bool _showPass = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      focusNode: focusNode,
-      obscureText: obscure,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      obscureText: _showPass,
       cursorColor: mainColor,
-      validator: validator,
-      keyboardType: keyboardType,
+
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
+
       decoration: InputDecoration(
+// focusColor: mainColor,
         fillColor: Colors.grey.shade200,
-        suffixIcon: Icon( Icons.visibility_off),
+        suffixIcon: GestureDetector(
+          onTap: (){
+setState(() {
+  _showPass = !_showPass;
+
+});
+          },
+            child: Icon( _showPass? Icons.visibility_off: Icons.visibility)),
         prefixIcon: Icon(
-          icon,
+          Icons.lock
         ),
         hintStyle: paragraph,
-        label: Text(label),
+        label: Text(widget.label),
         labelStyle: paragraph.copyWith(color: mainColor),
         filled: true,
         contentPadding: EdgeInsets.all(18),

@@ -9,4 +9,5 @@ class RouteName{
     static const String mapScreen = 'map';
     static const String donationScreen = 'donation';
     static const String profileScreen   = 'profile';
+    static const String validationScreen   = 'validation';
 }

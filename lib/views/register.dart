@@ -45,149 +45,286 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     // TODO: implement dispose
   }
-
+late  bool _passVisible = false;
+  ValueNotifier<bool> toggle = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<RegisterProvider>(context, listen: true);
     return Scaffold(
       body: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.all(18.0),
-              child: ChangeNotifierProvider(
-                create: (_) => RegisterProvider(),
-                child: Consumer<RegisterProvider>(
-                  builder: (context, value, child) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Container(
-                        //   height: 200,
-                        //   child: Image.asset('asset/signup.png'),
-                        // ),
-                        // SizedBox(
-                        //   height: 20,
-                        // ),
-                        SizedBox(
-                          height: 100,
+              child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Container(
+                      //   height: 200,
+                      //   child: Image.asset('asset/signup.png'),
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      SizedBox(
+                        height: 100,
+                      ),
+                      Center(
+                        child: Text(
+                          "Sign Up",
+                          style: Heading1.copyWith(height: 1.3),
                         ),
-                        Center(
-                          child: Text(
-                            "Sign Up",
-                            style: Heading1.copyWith(height: 1.3),
-                          ),
+                      ),
+                      Center(
+                        child: Text(
+                          "Create your account",
+                          style: paragraph,
                         ),
-                        Center(
-                          child: Text(
-                            "Create your account",
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              InputField(
+                                label: 'Full Name',
+                                keyboardType: TextInputType.text,
+                                controller: nameController,
+                                focusNode: nameNode,
+                                icon: Icons.person,
+                                validator: (value) {
+                                  return value.isEmpty ? 'Enter Name' : null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              InputField(
+                                label: 'Email',
+                                keyboardType: TextInputType.emailAddress,
+                                controller: emailController,
+                                focusNode: emailNode,
+                                icon: Icons.mail,
+                                validator: (value) {
+                                  return value.isEmpty ? 'Enter Email' : null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              PasswordField(
+                               
+                                controller: passController,
+                                focusNode: passNode,
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Enter Password'
+                                      : null;
+                                },
+                                label: 'Password',
+                                keyboardType: TextInputType.visiblePassword,
+
+                              ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
+                              // PasswordField(
+                              //
+                              //   obscure: true
+                              //   ,
+                              //   controller: passController,
+                              //   focusNode: passNode,
+                              //   validator: (value) {
+                              //     return value.isEmpty ? 'Enter Password' : null;
+                              //   },
+                              //   label: 'Confirm Password',
+                              //   keyboardType: TextInputType.visiblePassword,
+                              //   icon: Icons.lock,
+                              // ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              GradientButton(
+                                loading: provider.isLoading,
+                                label: 'Create Account',
+                                onPress: () {
+                                  if(_formKey.currentState!.validate()){
+                                    provider.signup(
+                                        context,
+                                        nameController.text,
+                                        emailController.text,
+                                        passController.text);
+                                  }
+                                },
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Already have an account?",
                             style: paragraph,
                           ),
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                InputField(
-                                  label: 'Full Name',
-                                  keyboardType: TextInputType.text,
-                                  controller: nameController,
-                                  focusNode: nameNode,
-                                  icon: Icons.person,
-                                  validator: (value) {
-                                    return value.isEmpty ? 'Enter Name' : null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                InputField(
-                                  label: 'Email',
-                                  keyboardType: TextInputType.emailAddress,
-                                  controller: emailController,
-                                  focusNode: emailNode,
-                                  icon: Icons.mail,
-                                  validator: (value) {
-                                    return value.isEmpty ? 'Enter Email' : null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                PasswordField(
-                                  obscure: true,
-                                  controller: passController,
-                                  focusNode: passNode,
-                                  validator: (value) {
-                                    return value.isEmpty
-                                        ? 'Enter Password'
-                                        : null;
-                                  },
-                                  label: 'Password',
-                                  keyboardType: TextInputType.visiblePassword,
-                                  icon: Icons.lock,
-                                ),
-                                // SizedBox(
-                                //   height: 20,
-                                // ),
-                                // PasswordField(
-                                //
-                                //   obscure: true
-                                //   ,
-                                //   controller: passController,
-                                //   focusNode: passNode,
-                                //   validator: (value) {
-                                //     return value.isEmpty ? 'Enter Password' : null;
-                                //   },
-                                //   label: 'Confirm Password',
-                                //   keyboardType: TextInputType.visiblePassword,
-                                //   icon: Icons.lock,
-                                // ),
-                                SizedBox(
-                                  height: 40,
-                                ),
-                                GradientButton(
-                                  loading: isLoading,
-                                  label: 'Create Account',
-                                  onPress: () {
-                                    if(_formKey.currentState!.validate()){
-                                      value.signup(
-                                          context,
-                                          nameController.text,
-                                          emailController.text,
-                                          passController.text);
-                                    }
-                                  },
-                                ),
-                              ],
-                            )),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Already have an account?",
-                              style: paragraph,
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, RouteName.loginScreen);
-                                },
-                                child: Text(
-                                  "Login.",
-                                  style: paragraph.copyWith(color: mainColor),
-                                ))
-                          ],
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ))),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, RouteName.loginScreen);
+                              },
+                              child: Text(
+                                "Login.",
+                                style: paragraph.copyWith(color: mainColor),
+                              ))
+                        ],
+                      )
+                    ],
+                  ),
+
+          //     ChangeNotifierProvider(
+          //   create: (_) => RegisterProvider(),
+          //   child: Consumer<RegisterProvider>(
+          //     builder: (context, value, child) {
+          //       return Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         children: [
+          //           // Container(
+          //           //   height: 200,
+          //           //   child: Image.asset('asset/signup.png'),
+          //           // ),
+          //           // SizedBox(
+          //           //   height: 20,
+          //           // ),
+          //           SizedBox(
+          //             height: 100,
+          //           ),
+          //           Center(
+          //             child: Text(
+          //               "Sign Up",
+          //               style: Heading1.copyWith(height: 1.3),
+          //             ),
+          //           ),
+          //           Center(
+          //             child: Text(
+          //               "Create your account",
+          //               style: paragraph,
+          //             ),
+          //           ),
+          //           SizedBox(
+          //             height: 40,
+          //           ),
+          //           Form(
+          //               key: _formKey,
+          //               child: Column(
+          //                 children: [
+          //                   InputField(
+          //                     label: 'Full Name',
+          //                     keyboardType: TextInputType.text,
+          //                     controller: nameController,
+          //                     focusNode: nameNode,
+          //                     icon: Icons.person,
+          //                     validator: (value) {
+          //                       return value.isEmpty ? 'Enter Name' : null;
+          //                     },
+          //                   ),
+          //                   SizedBox(
+          //                     height: 20,
+          //                   ),
+          //                   InputField(
+          //                     label: 'Email',
+          //                     keyboardType: TextInputType.emailAddress,
+          //                     controller: emailController,
+          //                     focusNode: emailNode,
+          //                     icon: Icons.mail,
+          //                     validator: (value) {
+          //                       return value.isEmpty ? 'Enter Email' : null;
+          //                     },
+          //                   ),
+          //                   SizedBox(
+          //                     height: 20,
+          //                   ),
+          //                   PasswordField(
+          //                     obscure: true,
+          //                     controller: passController,
+          //                     focusNode: passNode,
+          //                     validator: (value) {
+          //                       return value.isEmpty
+          //                           ? 'Enter Password'
+          //                           : null;
+          //                     },
+          //                     label: 'Password',
+          //                     keyboardType: TextInputType.visiblePassword,
+          //                     icon: Icons.lock, ontap: () {
+          //                     setState(() {
+          //                       _passVisible = !_passVisible;
+          //                     });
+          //                   }, visibility: _passVisible? Icons.visibility_off : Icons.visibility,
+          //                   ),
+          //                   // SizedBox(
+          //                   //   height: 20,
+          //                   // ),
+          //                   // PasswordField(
+          //                   //
+          //                   //   obscure: true
+          //                   //   ,
+          //                   //   controller: passController,
+          //                   //   focusNode: passNode,
+          //                   //   validator: (value) {
+          //                   //     return value.isEmpty ? 'Enter Password' : null;
+          //                   //   },
+          //                   //   label: 'Confirm Password',
+          //                   //   keyboardType: TextInputType.visiblePassword,
+          //                   //   icon: Icons.lock,
+          //                   // ),
+          //                   SizedBox(
+          //                     height: 40,
+          //                   ),
+          //                   GradientButton(
+          //                     loading: value.isLoading,
+          //                     label: 'Create Account',
+          //                     onPress: () {
+          //                       if(_formKey.currentState!.validate()){
+          //                         value.signup(
+          //                             context,
+          //                             nameController.text,
+          //                             emailController.text,
+          //                             passController.text);
+          //                       }
+          //                     },
+          //                   ),
+          //                 ],
+          //               )),
+          //           SizedBox(
+          //             height: 10,
+          //           ),
+          //           Row(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               Text(
+          //                 "Already have an account?",
+          //                 style: paragraph,
+          //               ),
+          //               TextButton(
+          //                   onPressed: () {
+          //                     Navigator.pushNamed(
+          //                         context, RouteName.loginScreen);
+          //                   },
+          //                   child: Text(
+          //                     "Login.",
+          //                     style: paragraph.copyWith(color: mainColor),
+          //                   ))
+          //             ],
+          //           )
+          //         ],
+          //       );
+          //     },
+          //   ),
+          // )
+          )),
     );
   }
 }
