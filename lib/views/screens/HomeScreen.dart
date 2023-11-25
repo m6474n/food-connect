@@ -1,7 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:food_donation_app/components/InputField.dart';
 import 'package:food_donation_app/components/card.dart';
 import 'package:food_donation_app/components/searchField.dart';
+import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:food_donation_app/views/add_post.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,115 +20,144 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String position = "";
+
+  final searchController = TextEditingController();
+  final searchNode = FocusNode();
+  final dbref = FirebaseFirestore.instance.collection("Users");
+  String location = "Your location...";
+
+  getLocation() async {
+    var ref = await dbref.doc(FirebaseAuth.instance.currentUser!.uid).get();
+    setState(() {
+      location = ref.data()!['address'];
+
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor : Colors.white,
-        elevation: 2,
-        automaticallyImplyLeading: false,
-        title: ListTile(
-          leading: Icon(Icons.location_on_outlined),
-          title: Text(
-            'Your Location',
-            style: Heading3.copyWith(height: 0.1),
-          ),
-          subtitle: Text(
-            'Description',
-            style: paragraph.copyWith(fontSize: 14, height: 0.2),
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {}, icon: Icon(Icons.notifications_outlined)),
-          CircleAvatar(
-            backgroundColor: mainColor,
-            backgroundImage: AssetImage('./asset/profile.png'),
-          ),
-          SizedBox(
-            width: 20,
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          children: [
-            Container(
-              child: SearchField(),
-            ),
-            Container(
-              height: 200,
-              margin: EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                    image: AssetImage('./asset/homepage_banner.png'),
-                    fit: BoxFit.cover),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.black,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [0.1, 1]),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(28.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          height: 30,
-                          width: 120,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(24),
-                              gradient: LinearGradient(
-                                  colors: [mainColor, secondaryColor])),
-                          child: Center(
-                              child: Text(
-                            'Donate',
-                            style: Heading3.copyWith(color: Colors.white),
-                          )),
-                        ),
-                      ],
+    return WillPopScope(
+      onWillPop: ()async{
+        SystemNavigator.pop();
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 1,
+backgroundColor: Colors.white,
+              title: Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: ListTile(
+                    leading: GestureDetector(
+                        onTap: getLocation,
+                        child: Icon(Icons.location_on, color: mainColor,size: 32,)),
+                    title: Text(
+location.toString(),
+                      style: paragraph.copyWith(
+                          fontSize: 12, color: mainColor, height: 1),
                     ),
+
+                    trailing: CircleAvatar(),
+                  ))),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: InputField(
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    validator: (val) {
+                      return null;
+                    },
+                    focusNode: searchNode,
+                    icon: Icons.search,
+                    label: 'Search Anything...'),
+              ),
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(color: Colors.grey.shade100),
+              ),
+              ListTile(
+                title: Text(
+                  'Recent Donations',
+                  style: paragraph.copyWith(fontWeight: FontWeight.bold),
+                ),
+                trailing: GestureDetector(
+                  onTap: (){
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=> AddPost()));
+                  },
+                  child: Text(
+                    'See all',
+                    style: paragraph.copyWith(color: mainColor),
                   ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "NGO's near you",
-                  style: Heading3.copyWith(color: Colors.grey),
-                ),
-                TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'see all',
-                      style: paragraph.copyWith(color: mainColor),
-                    ))
-              ],
-            ),
-            Expanded(child: Container(
-              child: ListView.builder(itemBuilder: (context, index) {
-                return CardContiner();
-              }),
-            ))
-          ],
-        ),
-      ),
+              Expanded(
+                child: ListView.builder(
+                    // itemCount: 1,
+                    itemBuilder: (context, index) {
+                  return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 24),
+                      child: Container(
+                        color: Colors.grey.shade50,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
+                            Expanded(
+                                child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: Container(
+                                height: 80,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Food Title',
+                                      style: Heading3.copyWith(fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("Restaurent Name"),
+                                    Row(
+                                      children: [
+                                        Text('time'),
+                                        SizedBox(
+                                          width: 40,
+                                        ),
+                                        Text('qty/person')
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ))
+                          ],
+                        ),
+                      ));
+                }),
+              )
+            ],
+          )),
     );
   }
 }

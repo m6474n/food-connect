@@ -3,9 +3,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/routes/route_name.dart';
+import 'package:food_donation_app/views/add_post.dart';
 import 'package:food_donation_app/views/boarding_screen.dart';
 import 'package:food_donation_app/views/emailValidation.dart';
-import 'package:food_donation_app/views/home_page.dart';
+import 'package:food_donation_app/views/dashboard.dart';
 import 'package:food_donation_app/views/login.dart';
 import 'package:food_donation_app/views/register.dart';
 import 'package:food_donation_app/views/screens/ChatScreen.dart';
@@ -30,7 +31,7 @@ class Routes {
       case RouteName.boardingScreen:
         return MaterialPageRoute(builder: (_) => const BoardingScreen());
       case RouteName.homeScreen:
-        return MaterialPageRoute(builder: (_)=> const HomePage());
+        return MaterialPageRoute(builder: (_)=> const DashboardScreen());
       case RouteName.chatScreen:
         return MaterialPageRoute(builder: (_)=> const ChatScreen());
       case RouteName.mapScreen:
@@ -41,6 +42,7 @@ class Routes {
         return MaterialPageRoute(builder: (_)=> const ProfileScreen());
         case RouteName.validationScreen:
         return MaterialPageRoute(builder: (_)=> const ValidationScreen());
+
 
 
       default:
@@ -56,7 +58,7 @@ class Routes {
 }
 
 Map<String , WidgetBuilder> routes={
-  "/" : (context) => HomePage(),
+  "/" : (context) => DashboardScreen(),
   "/splashScreen" : (context) => SplashScreen(),
   "/login" : (context) => LoginScreen(),
   "/signup" : (context) => RegisterScreen(),

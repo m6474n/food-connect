@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:food_donation_app/controller/Session_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/home_page.dart';
+import 'package:food_donation_app/views/dashboard.dart';
 
 class RegisterProvider with ChangeNotifier{
 

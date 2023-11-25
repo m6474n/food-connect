@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/home_page.dart';
+import 'package:food_donation_app/views/dashboard.dart';
 
 
 
@@ -27,7 +27,7 @@ class LoginProvider with ChangeNotifier {
           setLoading(false);
           Utils.toastMessage("Login Successfully", Colors.green);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
     }).catchError((e) {
       Utils.toastMessage(e.toString(), Colors.green);
     }).whenComplete(() {
