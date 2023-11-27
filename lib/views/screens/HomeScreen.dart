@@ -94,7 +94,7 @@ location.toString(),
                 ),
                 trailing: GestureDetector(
                   onTap: (){
-                   Navigator.push(context, MaterialPageRoute(builder: (context)=> AddPost()));
+                   Navigator.pushNamed(context, RouteName.donationScreen);
                   },
                   child: Text(
                     'See all',

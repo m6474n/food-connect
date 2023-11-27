@@ -11,7 +11,7 @@ import 'package:food_donation_app/models/UserModel.dart';
 import 'package:food_donation_app/utility/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfilerProvider extends ChangeNotifier {
+class ProfileProvider extends ChangeNotifier {
   final auth = FirebaseAuth.instance;
   final dbRef = FirebaseFirestore.instance.collection("Users");
   final db = FirebaseFirestore.instance;
@@ -55,10 +55,10 @@ class ProfilerProvider extends ChangeNotifier {
     }
   }
 
-  void pickImage(context) {
+  void pickImage(BuildContext context) {
     showDialog(
         context: context,
-        builder: (_) {
+        builder: (context) {
           return AlertDialog(
             content: Container(
               height: 120,

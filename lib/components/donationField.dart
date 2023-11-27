@@ -3,23 +3,22 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/utility/constants.dart';
 
-class InputField extends StatelessWidget {
-  InputField({
+class DonationField extends StatelessWidget {
+  DonationField({
     required this.controller,
     required this.keyboardType,
     required this.validator,
     required this.focusNode,
-    this.icon,
-    required this.label,
-    this.obscure = false,
+       required this.label,
+
     Key? key,
   }) : super(key: key);
 
   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
-   IconData? icon;
+
   final String label;
-  final bool obscure;
+
   final FormFieldValidator validator;
   final TextInputType keyboardType;
 
@@ -29,21 +28,17 @@ class InputField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       focusNode: focusNode,
-      obscureText: obscure,
+
       cursorColor: mainColor,
       validator: validator,
-
       decoration: InputDecoration(
-
         fillColor: Colors.grey.shade200,
-        prefixIcon: Icon(
-         icon
-        ),
+
         hintStyle: paragraph,
         label: Text(label),
         labelStyle: paragraph.copyWith(color: mainColor),
         filled: true,
-        contentPadding: EdgeInsets.all(18),
+
         border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(12)),

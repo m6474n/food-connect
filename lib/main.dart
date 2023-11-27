@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/controller/login_controller.dart';
+import 'package:food_donation_app/controller/profile_controller.dart';
 import 'package:food_donation_app/controller/register_controller.dart';
 import 'package:food_donation_app/models/list_Provider.dart';
 import 'package:food_donation_app/routes/route_name.dart';
@@ -29,15 +30,17 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider(create: (_)=> LoginProvider()),
       ChangeNotifierProvider(create: (_)=> RegisterProvider()),
       ChangeNotifierProvider(create: (_)=> ListProvider()),
+      ChangeNotifierProvider(create: (_)=> ProfileProvider()),
 
       // ChangeNotifierProvider(create: create)
 
     ],child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Food Connect ',
       theme: ThemeData(
+        primarySwatch: primaryMaterialColor,
         useMaterial3: true,
-      ).copyWith(primaryColor: mainColor),
+      ),
      // home: TestScreen(),
       home: SplashScreen(),
       initialRoute: RouteName.splashScreen,

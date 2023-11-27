@@ -10,9 +10,10 @@ import 'package:food_donation_app/views/dashboard.dart';
 import 'package:food_donation_app/views/login.dart';
 import 'package:food_donation_app/views/register.dart';
 import 'package:food_donation_app/views/screens/ChatScreen.dart';
-import 'package:food_donation_app/views/screens/DonationScreen.dart';
+import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
 import 'package:food_donation_app/views/screens/MapScreen.dart';
 import 'package:food_donation_app/views/screens/ProfileScreen.dart';
+import 'package:food_donation_app/views/screens/donation/addDonation.dart';
 import 'package:food_donation_app/views/splash_screen.dart';
 import 'package:food_donation_app/views/welcome_screen.dart';
 
@@ -27,24 +28,23 @@ class Routes {
       case RouteName.registerScreen:
         return MaterialPageRoute(builder: (_) =>  RegisterScreen());
       case RouteName.welcomScreen:
-        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+        return MaterialPageRoute(builder: (_) =>  WelcomeScreen());
       case RouteName.boardingScreen:
-        return MaterialPageRoute(builder: (_) => const BoardingScreen());
+        return MaterialPageRoute(builder: (_) =>  BoardingScreen());
       case RouteName.homeScreen:
-        return MaterialPageRoute(builder: (_)=> const DashboardScreen());
+        return MaterialPageRoute(builder: (_)=>  DashboardScreen());
       case RouteName.chatScreen:
-        return MaterialPageRoute(builder: (_)=> const ChatScreen());
+        return MaterialPageRoute(builder: (_)=>  ChatScreen());
       case RouteName.mapScreen:
-        return MaterialPageRoute(builder: (_)=> const MapScreen());
+        return MaterialPageRoute(builder: (_)=>  MapScreen());
       case RouteName.donationScreen:
-        return MaterialPageRoute(builder: (_)=> const DonationScreen());
+        return MaterialPageRoute(builder: (_)=>  DonationScreen());
       case RouteName.profileScreen:
-        return MaterialPageRoute(builder: (_)=> const ProfileScreen());
-        case RouteName.validationScreen:
-        return MaterialPageRoute(builder: (_)=> const ValidationScreen());
-
-
-
+        return MaterialPageRoute(builder: (_)=>  ProfileScreen());
+      case RouteName.validationScreen:
+        return MaterialPageRoute(builder: (_)=>  ValidationScreen());
+      case RouteName.addDonation:
+        return MaterialPageRoute(builder: (_)=>  AddDonation());
       default:
         return MaterialPageRoute(builder: (_) {
           return Scaffold(

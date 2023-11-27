@@ -6,6 +6,7 @@ import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/components/RoundedButton.dart';
 import 'package:food_donation_app/controller/Session_manager.dart';
 import 'package:food_donation_app/controller/home_controller.dart';
+import 'package:food_donation_app/controller/profile_controller.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
@@ -49,6 +50,7 @@ setState(() {
 
   @override
   Widget build(BuildContext context) {
+   final provider = Provider.of<ProfileProvider>(context, listen: true);
     return SafeArea(
       child: Scaffold(
           body: Center(
@@ -64,21 +66,26 @@ setState(() {
                 Positioned(
                   top: 70,
                   left: 70,
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: mainColor),
-                    child: Center(
-                        child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                    )),
+                  child: GestureDetector(
+                    onTap: (){
+                     provider.pickImage(context);
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: mainColor),
+                      child: Center(
+                          child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 15,
+                        ),
+                      )),
+                    ),
                   ),
                 )
               ],
