@@ -26,31 +26,31 @@ class _ChatScreenState extends State<ChatScreen> {
           SearchField(),
           SizedBox(height: 60,),
           StreamBuilder<QuerySnapshot>(stream: dbRef, builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-         if(snapshot.connectionState == ConnectionState.waiting){
-           return CircularProgressIndicator(color: mainColor,);
-         }
-         if(snapshot.hasError){
-           Utils.toastMessage('Something went wrong!', Colors.red);
-         }
-          return Expanded(
-            child: ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index){
-              return ListTile(
-                title: Text(snapshot.data!.docs[index]['message'].toString()),
-              );
-            }),
-          );
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return CircularProgressIndicator(color: mainColor,);
+            }
+            if(snapshot.hasError){
+              Utils.toastMessage('Something went wrong!', Colors.red);
+            }
+            return Expanded(
+              child: ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      title: Text(snapshot.data!.docs[index]['message'].toString()),
+                    );
+                  }),
+            );
           }),
 
 
 
 
-          
+
 
         ],),
       ),
-      floatingActionButton: ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> AddPost()));},child: Icon(Icons.add),),),
+        floatingActionButton: ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> AddPost()));},child: Icon(Icons.add),),),
     );
   }
 }

@@ -10,10 +10,10 @@ import 'package:food_donation_app/views/dashboard.dart';
 class RegisterProvider with ChangeNotifier{
 
   FirebaseAuth auth  = FirebaseAuth.instance;
-   bool _isLoading = false;
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
- final dbRef = FirebaseFirestore.instance.collection('Users');
+  final dbRef = FirebaseFirestore.instance.collection('Users');
   void setLoading (bool value){
     _isLoading = value;
     notifyListeners();
@@ -21,26 +21,27 @@ class RegisterProvider with ChangeNotifier{
   }
 
 
-  void signup(BuildContext context, String name,String email,String password){
-      setLoading(true);
+  void signup(BuildContext context, String name,String email,String password, String role){
+    setLoading(true);
     auth.createUserWithEmailAndPassword(email: email, password: password).then((value){
       setLoading(false);
       // final user =  auth.currentUser
       final id = value.user!.uid.toString();
-      SessionController().userId = id;
+      // SessionController().userId = auth.currentUser!.uid;
 
-     dbRef.doc(id).set({
+      dbRef.doc(id).set({
         'id': id,
+        'role': role,
         'name' : name,
         'email': email,
         'phone' : '',
         'image': '',
         'address': '',
         'pass': password,
-       'isVerified': "Not"
+        'isVerified': "Not"
       });
       auth.currentUser?.sendEmailVerification();
-      Navigator.pushNamed(context, RouteName.validationScreen);
+      Navigator.pushNamed(context, RouteName.dashboard);
 
 
 

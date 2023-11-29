@@ -11,5 +11,6 @@ class RouteName{
     static const String profileScreen   = 'profile';
     static const String validationScreen   = 'validation';
     static const String addDonation   = 'donate';
+    static const String dashboard   = 'dashboard';
 
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/components/InputField.dart';
@@ -36,7 +37,7 @@ class _AddDonationState extends State<AddDonation> {
     qtyNode.dispose();
   }
 
-  final ref = FirebaseFirestore.instance.collection('Donations');
+  final ref = FirebaseFirestore.instance.collection('donations');
   // final date = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
   DateTime dateRef = DateTime.now();
@@ -198,7 +199,7 @@ class _AddDonationState extends State<AddDonation> {
                     label: 'Donate',
                     onPress: () {
                       ref
-                          .doc(SessionController().userId)
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
                           .set({"donation": FieldValue.arrayUnion(_list)});
                     },
                     loading: false),

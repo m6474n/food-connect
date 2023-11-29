@@ -6,17 +6,17 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-    cursorColor: mainColor,
+        cursorColor: mainColor,
 
         decoration: InputDecoration(
-        filled: true,
-suffixIcon: Icon(Icons.filter_list_outlined, color: mainColor,),
-        contentPadding:EdgeInsets.symmetric(horizontal: 16,vertical: 12),
-    hintStyle: paragraph,
-    hintText: 'Search Something',
+            filled: true,
+            suffixIcon: Icon(Icons.filter_list_outlined, color: mainColor,),
+            contentPadding:EdgeInsets.symmetric(horizontal: 16,vertical: 12),
+            hintStyle: paragraph,
+            hintText: 'Search Something',
 
-    border: OutlineInputBorder(
-    borderSide: BorderSide.none,
-    borderRadius: BorderRadius.circular(12)))
+            border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(12)))
     );}
 }

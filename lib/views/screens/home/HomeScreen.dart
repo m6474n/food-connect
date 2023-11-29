@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final dbref = FirebaseFirestore.instance.collection("Users");
   String location = "Your location...";
 
-  getLocation() async {
+  Future getLocation() async {
     var ref = await dbref.doc(FirebaseAuth.instance.currentUser!.uid).get();
     setState(() {
       location = ref.data()!['address'];
@@ -53,17 +53,17 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
               automaticallyImplyLeading: false,
               elevation: 1,
-backgroundColor: Colors.white,
+              backgroundColor: mainColor,
               title: Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: ListTile(
                     leading: GestureDetector(
                         onTap: getLocation,
-                        child: Icon(Icons.location_on, color: mainColor,size: 32,)),
+                        child: Icon(Icons.location_on, color: Colors.white,size: 32,)),
                     title: Text(
-location.toString(),
+                      location.toString(),
                       style: paragraph.copyWith(
-                          fontSize: 12, color: mainColor, height: 1),
+                          fontSize: 12, color: Colors.white, height: 1),
                     ),
 
                     trailing: CircleAvatar(),
@@ -94,7 +94,7 @@ location.toString(),
                 ),
                 trailing: GestureDetector(
                   onTap: (){
-                   Navigator.pushNamed(context, RouteName.donationScreen);
+
                   },
                   child: Text(
                     'See all',
@@ -104,57 +104,57 @@ location.toString(),
               ),
               Expanded(
                 child: ListView.builder(
-                    // itemCount: 1,
+                  // itemCount: 1,
                     itemBuilder: (context, index) {
-                  return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 24),
-                      child: Container(
-                        color: Colors.grey.shade50,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
-                                  borderRadius: BorderRadius.circular(8)),
-                            ),
-                            Expanded(
-                                child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 18.0),
-                              child: Container(
-                                height: 80,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Food Title',
-                                      style: Heading3.copyWith(fontSize: 18),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text("Restaurent Name"),
-                                    Row(
-                                      children: [
-                                        Text('time'),
-                                        SizedBox(
-                                          width: 40,
-                                        ),
-                                        Text('qty/person')
-                                      ],
-                                    ),
-                                  ],
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4.0, horizontal: 24),
+                          child: Container(
+                            color: Colors.grey.shade50,
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade100,
+                                      borderRadius: BorderRadius.circular(8)),
                                 ),
-                              ),
-                            ))
-                          ],
-                        ),
-                      ));
-                }),
+                                Expanded(
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.symmetric(horizontal: 18.0),
+                                      child: Container(
+                                        height: 80,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Food Title',
+                                              style: Heading3.copyWith(fontSize: 18),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text("Restaurent Name"),
+                                            Row(
+                                              children: [
+                                                Text('time'),
+                                                SizedBox(
+                                                  width: 40,
+                                                ),
+                                                Text('qty/person')
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ))
+                              ],
+                            ),
+                          ));
+                    }),
               )
             ],
           )),

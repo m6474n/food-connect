@@ -9,10 +9,10 @@ import 'package:food_donation_app/views/emailValidation.dart';
 import 'package:food_donation_app/views/dashboard.dart';
 import 'package:food_donation_app/views/login.dart';
 import 'package:food_donation_app/views/register.dart';
-import 'package:food_donation_app/views/screens/ChatScreen.dart';
+import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
 import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
-import 'package:food_donation_app/views/screens/MapScreen.dart';
-import 'package:food_donation_app/views/screens/ProfileScreen.dart';
+import 'package:food_donation_app/views/screens/map/MapScreen.dart';
+import 'package:food_donation_app/views/screens/profile/ProfileScreen.dart';
 import 'package:food_donation_app/views/screens/donation/addDonation.dart';
 import 'package:food_donation_app/views/splash_screen.dart';
 import 'package:food_donation_app/views/welcome_screen.dart';
@@ -31,7 +31,7 @@ class Routes {
         return MaterialPageRoute(builder: (_) =>  WelcomeScreen());
       case RouteName.boardingScreen:
         return MaterialPageRoute(builder: (_) =>  BoardingScreen());
-      case RouteName.homeScreen:
+      case RouteName.dashboard:
         return MaterialPageRoute(builder: (_)=>  DashboardScreen());
       case RouteName.chatScreen:
         return MaterialPageRoute(builder: (_)=>  ChatScreen());
