@@ -41,151 +41,148 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
     final provider = Provider.of<ProfileProvider>(context, listen: true);
-    return SafeArea(
-      child: Scaffold(
-        // resizeToAvoidBottomInset: true,
-        body: Container(
-          height: height*0.9,
-          child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        // title: Text(
+        //   'Profile Screen',
+        //   style: paragraph.copyWith(fontSize: 22, color: mainColor),
+        // ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> EditProfile(name: name, email: email, phone: phone, address: address)));
+              },
+              child: Text(
+                'Edti Profile',
+                style: paragraph.copyWith(color: mainColor),
+              ))
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Stack(
+            alignment: Alignment.center,
             children: [
-              SizedBox(height: 30,),
-              StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(auth.currentUser!.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    // Map<String, dynamic>?  map = snapshot.data!.data();
-                    name = snapshot.data!['name'].toString();
-                    email = snapshot.data!['email'].toString();
-                    phone = snapshot.data!['phone'].toString();
-                    address = snapshot.data!['address'].toString();
-                    role = snapshot.data!['role'].toString();
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: Container(
-                          height: 100,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: mainColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: Text(
-                            'Something went wrong... Please Try again later.'),
-                      );
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 60,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => EditProfile(
-                                            name: name,
-                                            email: email,
-                                            phone: phone,
-                                            address: address)));
-                              },
-                              child: Text(
-                                'Edit Profile',
-                                style: paragraph.copyWith(color: mainColor),
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
+              Positioned(
+                // bottom: 1,
+                child: Container(
+                  height: height * 0.8,
+                ),
+              ),
+              Positioned(
+                  bottom: 0,
+                  child: Container(
+                    height: height * 0.7,
+                    width: width * 1,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade50.withOpacity(0.6),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24))),
+                  )),
 
-                          // data(content: role, label: 'Role'),
-                          data(content: snapshot.data!['name'], label: 'Name'),
-                          data(
-                              content: snapshot.data!['email'], label: 'Email'),
-                          data(
-                              content: snapshot.data!['phone'] == ""
-                                  ? "xxx xxxx xxxx"
-                                  : phone,
-                              label: 'Phone'),
-                          data(
-                              content: snapshot.data!['address'],
-                              label: 'Address'),
+              StreamBuilder(stream: FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(), builder: (context,snapshot){
+               name = snapshot.data!['name'];
+               email = snapshot.data!['email'];
+               phone = snapshot.data!['phone'];
+               address = snapshot.data!['address'];
+               role = snapshot.data!['role'];
+
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(child: CircularProgressIndicator(color: mainColor,),);
+                }
+                else if(!snapshot.hasData){
+                  return Center(child: Text('Something went wrong! Try again later.'),);
+                }
+                else{
+                  return  Positioned(
+                   top: 150
+                    ,
+                    child: Container(
+                      width: width *1,
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      height: height * 0.5,
+                      child: ListView(
+                        children: [
+                          ReusableRow(title: 'Name', value: name, iconData: Icons.person)
+                          , ReusableRow(title: 'Email', value: email, iconData: Icons.email)
+                          ,ReusableRow(title: 'Phone', value: phone, iconData: Icons.phone)
+                          ,ReusableRow(title: 'Address', value: address, iconData: Icons.home)
+                          // ,ReusableRow(title: 'Address', value: 'Name', iconData: Icons.home)
                         ],
                       ),
-                    );
-                  }),
-         SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: GradientButton(
-                    label: 'Logout',
-                    onPress: () {
-                      auth.signOut().then((value) {
-                        Navigator.pop(context);
-                      });
-                    },
-                    loading: false),
-              ),
+                    ),
+                  );
+                }
+              }),
+               Positioned(
+                  top: 0,
+                  child: CircleAvatar(
+                    radius: 72,
+                    backgroundColor: mainColor,
+                  )),
+              Positioned(
+                  bottom: 25,
+                  child: Container(
+                      padding: EdgeInsets.all(12),
+                      height: 80,
+                      width: width * 1,
+                      child: GradientButton(
+                          label: 'Logout',
+                          onPress: () {
+                           provider.logutUser(context);
+                          },
+                          loading: provider.Loading)))
             ],
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
-class data extends StatelessWidget {
-  const data({super.key, required this.content, required this.label});
-  final String label;
-  final String content;
+class ReusableRow extends StatelessWidget {
+  final String title, value;
+  final IconData iconData;
+
+  const ReusableRow(
+      {Key? key,
+      required this.title,
+      required this.value,
+      required this.iconData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-        child: Column(
-          children: [
-            Container(
-              height: 50,
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: ClipRect(
-                        child: Text(
-                          label,
-                          style: paragraph.copyWith(color: Colors.black),
-                        ),
-                      )),
-                  Expanded(
-                    flex: 2,
-                    child: ClipRect(
-                      child: Text(
-                        content,
-                        style: paragraph.copyWith(color: Colors.black),
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+    return Column(
+      children: [
+        ListTile(
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          leading: Icon(
+            iconData,
+            color: mainColor,
+          ),
+          trailing: Container(
+            width: MediaQuery.of(context).size.width *0.5,
+            child: Text(
+              value,
+              style: Theme.of(context).textTheme.bodyText2,
+              textAlign: TextAlign.right,
             ),
-            Divider(
-              height: 2,
-              color: Colors.grey.withOpacity(0.2),
-            )
-          ],
-        ));
+          ),
+        ),
+        Divider(
+          thickness: 1,
+          color: Colors.white,
+        )
+      ],
+    );
   }
 }

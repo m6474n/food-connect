@@ -111,4 +111,15 @@ class ProfileProvider extends ChangeNotifier {
         snapshot.docs.map((e) => UserModel.fromSnapsshot(e)).single;
     return userData;
   }
+
+  logutUser(BuildContext context){
+   setLoading(true);
+    auth.signOut().then((value){
+      setLoading(false);
+      Navigator.pop(context);
+      Utils.toastMessage('Logout Successfully', Colors.green);
+    });
+  }
+
+
 }

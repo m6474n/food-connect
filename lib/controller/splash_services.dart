@@ -14,7 +14,7 @@ class SplashService {
     final user = auth.currentUser;
     if (user !=null){
   Timer(Duration(seconds: 3),(){
-    Navigator.pushNamed(context, RouteName.homeScreen);
+    Navigator.pushNamed(context, RouteName.dashboard);
   });
 
 
