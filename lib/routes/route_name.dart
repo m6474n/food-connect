@@ -12,6 +12,7 @@ class RouteName{
     static const String validationScreen   = 'validation';
     static const String addDonation   = 'donate';
     static const String dashboard   = 'dashboard';
+    static const String createChat   = 'createChat';
 
 
 }

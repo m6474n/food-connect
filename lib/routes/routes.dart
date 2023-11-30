@@ -10,6 +10,7 @@ import 'package:food_donation_app/views/dashboard.dart';
 import 'package:food_donation_app/views/login.dart';
 import 'package:food_donation_app/views/register.dart';
 import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
+import 'package:food_donation_app/views/screens/chat/createChat.dart';
 import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
 import 'package:food_donation_app/views/screens/map/MapScreen.dart';
 import 'package:food_donation_app/views/screens/profile/ProfileScreen.dart';
@@ -45,6 +46,8 @@ class Routes {
         return MaterialPageRoute(builder: (_)=>  ValidationScreen());
       case RouteName.addDonation:
         return MaterialPageRoute(builder: (_)=>  AddDonation());
+      case RouteName.createChat:
+        return MaterialPageRoute(builder: (_)=>  CreateChat());
       default:
         return MaterialPageRoute(builder: (_) {
           return Scaffold(
