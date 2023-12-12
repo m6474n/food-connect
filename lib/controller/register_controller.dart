@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:food_donation_app/controller/Role_manager.dart';
 import 'package:food_donation_app/controller/Session_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/utils.dart';
@@ -40,7 +41,8 @@ class RegisterProvider with ChangeNotifier{
         'pass': password,
         'isVerified': "Not"
       });
-      auth.currentUser?.sendEmailVerification();
+      auth.currentUser!.updateDisplayName(name);
+      RoleController().role = role;
       Navigator.pushNamed(context, RouteName.dashboard);
 
 

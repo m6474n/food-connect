@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/utility/constants.dart';
 class MessageField extends StatelessWidget {
-   MessageField({super.key, required this.label,  required this.validator, required this.keyboardType});
-  TextEditingController controller = TextEditingController();
+   MessageField({super.key, required this.label, required this.controller});
+   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
   IconData? icon;
   final String label;
 
-  final FormFieldValidator validator;
-  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      keyboardType: keyboardType,
       focusNode: focusNode,
 
       cursorColor: mainColor,
-      validator: validator,
 
       decoration: InputDecoration(
 

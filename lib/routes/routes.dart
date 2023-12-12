@@ -10,7 +10,7 @@ import 'package:food_donation_app/views/dashboard.dart';
 import 'package:food_donation_app/views/login.dart';
 import 'package:food_donation_app/views/register.dart';
 import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
-import 'package:food_donation_app/views/screens/chat/createChat.dart';
+import 'package:food_donation_app/views/screens/chat/UsersListScreen.dart';
 import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
 import 'package:food_donation_app/views/screens/map/MapScreen.dart';
 import 'package:food_donation_app/views/screens/profile/ProfileScreen.dart';

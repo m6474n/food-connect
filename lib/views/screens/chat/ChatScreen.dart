@@ -16,7 +16,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  var dbref = FirebaseFirestore.instance.collection('Users');
+  final dbRef = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,9 @@ class _ChatScreenState extends State<ChatScreen> {
             child: SearchField(),
           ),
           StreamBuilder(
-              stream: dbref.snapshots(),
+              stream:dbRef
+                  .collection('chat_room')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -48,16 +50,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   print('something went wrong');
                 }
                 return Expanded(
-                  child: ListView.builder(
-                      itemCount: 2,
-                      itemBuilder: (context, index) {
-                        var document = snapshot.data!.docs[index];
-                        return ListTile(
-                          leading: CircleAvatar(),
-                          title: Text(snapshot.data!.docs[index]['name']),
-                          subtitle: Text(snapshot.data!.docs[index]['email']),
-                        );
-                      }),
+                  child: ListView(
+                    children: snapshot.data!.docs.map((DocumentSnapshot document){
+                      Map<String, dynamic> data = document.data()! as Map<String,dynamic>;
+                      return ListTile(title: Text(data.entries.toString()),);
+                    }).toList(),
+                  )
                 );
               })
         ],

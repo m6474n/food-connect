@@ -24,123 +24,103 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final auth = FirebaseAuth.instance;
 
-  String name = "Loading...";
-  String email = "Loading...";
-  String phone = "Loading...";
-  String address = "Loading...";
-  String role = 'Loading...';
-// String? img ;
+
 
   @override
-  void initState() {
-    // TODO: implement initState
 
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
-    final width = MediaQuery.sizeOf(context).width;
+
     final provider = Provider.of<ProfileProvider>(context, listen: true);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        // title: Text(
-        //   'Profile Screen',
-        //   style: paragraph.copyWith(fontSize: 22, color: mainColor),
-        // ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> EditProfile(name: name, email: email, phone: phone, address: address)));
-              },
-              child: Text(
-                'Edti Profile',
-                style: paragraph.copyWith(color: mainColor),
-              ))
-        ],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                // bottom: 1,
-                child: Container(
-                  height: height * 0.8,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          stream: FirebaseFirestore.instance
+              .collection('Users')
+              .doc(auth.currentUser!.uid)
+              .snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+            DocumentSnapshot data = snapshot.data!;
+
+            Map<String, dynamic> document = data.data() as Map<String, dynamic>;
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData) {
+              return Center(child: Text('Something went wrong..'));
+            }
+
+            return ListView(
+              children: [
+                Container(
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile(
+                                    name: document['name'],
+                                    email: document['email'],
+                                    phone: document['phone'],
+                                    address: document['address'])));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text(
+                          'Edit Profile',
+                          style: paragraph,textAlign: TextAlign.right,
+                        ),
+                      )),
                 ),
-              ),
-              Positioned(
-                  bottom: 0,
-                  child: Container(
-                    height: height * 0.7,
-                    width: width * 1,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade50.withOpacity(0.6),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24))),
-                  )),
-
-              StreamBuilder(stream: FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(), builder: (context,snapshot){
-               name = snapshot.data!['name'];
-               email = snapshot.data!['email'];
-               phone = snapshot.data!['phone'];
-               address = snapshot.data!['address'];
-               role = snapshot.data!['role'];
-
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return Center(child: CircularProgressIndicator(color: mainColor,),);
-                }
-                else if(!snapshot.hasData){
-                  return Center(child: Text('Something went wrong! Try again later.'),);
-                }
-                else{
-                  return  Positioned(
-                   top: 150
-                    ,
-                    child: Container(
-                      width: width *1,
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      height: height * 0.5,
-                      child: ListView(
-                        children: [
-                          ReusableRow(title: 'Name', value: name, iconData: Icons.person)
-                          , ReusableRow(title: 'Email', value: email, iconData: Icons.email)
-                          ,ReusableRow(title: 'Phone', value: phone, iconData: Icons.phone)
-                          ,ReusableRow(title: 'Address', value: address, iconData: Icons.home)
-                          // ,ReusableRow(title: 'Address', value: 'Name', iconData: Icons.home)
-                        ],
-                      ),
-                    ),
-                  );
-                }
-              }),
-               Positioned(
-                  top: 0,
-                  child: CircleAvatar(
-                    radius: 72,
-                    backgroundColor: mainColor,
-                  )),
-              Positioned(
-                  bottom: 25,
-                  child: Container(
-                      padding: EdgeInsets.all(12),
-                      height: 80,
-                      width: width * 1,
-                      child: GradientButton(
-                          label: 'Logout',
-                          onPress: () {
-                           provider.logutUser(context);
-                          },
-                          loading: provider.Loading)))
-            ],
-          ),
-        ],
+                Center(
+                    child: CircleAvatar(
+                  radius: 62,
+                )),
+                SizedBox(
+                  height: 30,
+                ),
+                ReusableRow(
+                    title: 'Name',
+                    value: document!['name'],
+                    iconData: Icons.person),
+                ReusableRow(
+                    title: 'Email',
+                    value: document!['email'],
+                    iconData: Icons.mail),
+                ReusableRow(
+                    title: 'Phone',
+                    value: document!['phone'],
+                    iconData: Icons.phone),
+                ReusableRow(
+                    title: 'Address',
+                    value: document!['address'],
+                    iconData: Icons.home),
+                SizedBox(
+                  height: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: GradientButton(
+                      label: 'Logout',
+                      onPress: () {
+                        auth.signOut().then((value) {
+                          Navigator.pushNamed(context, RouteName.loginScreen);
+                        });
+                      },
+                      loading: false),
+                )
+              ],
+            );
+          },
+        ),
       ),
+
     );
   }
 }
@@ -163,24 +143,26 @@ class ReusableRow extends StatelessWidget {
         ListTile(
           title: Text(
             title,
-            style: Theme.of(context).textTheme.bodyText2,
+            style: paragraph,
           ),
           leading: Icon(
             iconData,
             color: mainColor,
           ),
           trailing: Container(
-            width: MediaQuery.of(context).size.width *0.5,
+            width: MediaQuery.of(context).size.width * 0.5,
             child: Text(
               value,
-              style: Theme.of(context).textTheme.bodyText2,
+              style: paragraph,
               textAlign: TextAlign.right,
             ),
           ),
         ),
-        Divider(
-          thickness: 1,
-          color: Colors.white,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: Divider(
+color: Colors.grey.shade200,
+          ),
         )
       ],
     );

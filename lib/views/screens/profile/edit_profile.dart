@@ -70,16 +70,13 @@ class _EditProfileState extends State<EditProfile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Spacer(),
-            ElevatedButton(onPressed: (){
-              print(SessionController().userId);
-            }, child: Text('Test')),
+
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('Users')
                     .doc(auth.currentUser!.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  // Map<String, dynamic>?  map = snapshot.data!.data();
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator(
                       color: mainColor,
@@ -90,7 +87,7 @@ class _EditProfileState extends State<EditProfile> {
                         'Something went wrong... Please Try again later.');
                   }
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(18.0),
                     child: Column(
                       children: [
                         Stack(
@@ -99,21 +96,26 @@ class _EditProfileState extends State<EditProfile> {
                               height: 120,
                               width: 120,
                               decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: mainColor),
+                                  shape: BoxShape.circle, color: Colors.grey.shade100),
                             ),
                             Positioned(
                               top: 90,
                               left: 80,
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: mainColor)),
-                                child: Icon(
-                                  Icons.add,
-                                  color: mainColor,
+                              child: GestureDetector(
+                                onTap: (){
+                                  provider.pickImage(context);
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      color: mainColor,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.grey.shade100)),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.grey.shade100,
+                                  ),
                                 ),
                               ),
                             )
@@ -124,39 +126,55 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: DonationField(
-                              controller: nameController,
-                              keyboardType: TextInputType.text,
-                              validator: (val) {},
-                              focusNode: nameNode,
-                              label: 'Update Name'),
+                          child: TextFormField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                                hintText: 'Update Name',
+                                hintStyle: paragraph,
+                                fillColor: Colors.grey.shade100,
+                                filled: true,
+                                border: OutlineInputBorder(borderSide: BorderSide.none)
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: DonationField(
-                              controller: emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (val) {},
-                              focusNode: emailNode,
-                              label: 'Update Email'),
+                          child: TextFormField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                                hintText: 'Update Email',
+                                hintStyle: paragraph,
+                                fillColor: Colors.grey.shade100,
+                                filled: true,
+                                border: OutlineInputBorder(borderSide: BorderSide.none)
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: DonationField(
-                              controller: phoneController,
-                              keyboardType: TextInputType.phone,
-                              validator: (val) {},
-                              focusNode: phoneNode,
-                              label: 'Update Phone'),
+                          child: TextFormField(
+                            controller: phoneController,
+                            decoration: InputDecoration(
+                                hintText: 'Update Phone',
+                                hintStyle: paragraph,
+                                fillColor: Colors.grey.shade100,
+                                filled: true,
+                                border: OutlineInputBorder(borderSide: BorderSide.none)
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: DonationField(
-                              controller: addressController,
-                              keyboardType: TextInputType.streetAddress,
-                              validator: (val) {},
-                              focusNode: addressNode,
-                              label: 'Update Address'),
+                          child: TextFormField(
+                            controller: addressController,
+                            decoration: InputDecoration(
+                              hintText: 'Update Address',
+                                                            hintStyle: paragraph,
+                              fillColor: Colors.grey.shade100,
+                              filled: true,
+                              border: OutlineInputBorder(borderSide: BorderSide.none)
+                            ),
+                          ),
                         ),
                       ],
                     ),

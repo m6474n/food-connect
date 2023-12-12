@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/searchField.dart';
 import 'package:food_donation_app/utility/constants.dart';
-import 'package:food_donation_app/views/screens/chat/messageScreen.dart';
+import 'package:food_donation_app/views/screens/chat/ChatRoom.dart';
 class CreateChat extends StatefulWidget {
   const CreateChat({super.key});
 
@@ -39,16 +39,16 @@ class _CreateChatState extends State<CreateChat> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         var document = snapshot.data!.docs[index];
-                        if(snapshot.data!.docs[index]['id'] != FirebaseAuth.instance.currentUser!.uid ){
+
                           return ListTile(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (_)=> MessageScreen(name: snapshot.data!.docs[index]['name'], uid: snapshot.data!.docs[index]['id'])));
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=> MessageScreen(ReceiverName: snapshot.data!.docs[index]['name'], ReceiverId: snapshot.data!.docs[index]['id'])));
                             },
                             leading: CircleAvatar(),
                             title: Text(snapshot.data!.docs[index]['name']),
                             subtitle: Text(snapshot.data!.docs[index]['email']),
                           );
-                        }
+
 
                       }),
                 );

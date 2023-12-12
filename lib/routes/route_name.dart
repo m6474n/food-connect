@@ -13,6 +13,8 @@ class RouteName{
     static const String addDonation   = 'donate';
     static const String dashboard   = 'dashboard';
     static const String createChat   = 'createChat';
+    static const String donationDetails   = 'donationDetails';
+
 
 
 }

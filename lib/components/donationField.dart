@@ -8,14 +8,14 @@ class DonationField extends StatelessWidget {
     required this.controller,
     required this.keyboardType,
     required this.validator,
-    required this.focusNode,
+
        required this.label,
 
     Key? key,
   }) : super(key: key);
 
   TextEditingController controller = TextEditingController();
-  FocusNode focusNode = FocusNode();
+
 
   final String label;
 
@@ -27,7 +27,6 @@ class DonationField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
-      focusNode: focusNode,
 
       cursorColor: mainColor,
       validator: validator,

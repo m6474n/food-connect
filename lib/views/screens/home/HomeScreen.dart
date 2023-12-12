@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:food_donation_app/components/InputField.dart';
 import 'package:food_donation_app/components/card.dart';
 import 'package:food_donation_app/components/searchField.dart';
+import 'package:food_donation_app/controller/LocationManager.dart';
+import 'package:food_donation_app/controller/Role_manager.dart';
 import 'package:food_donation_app/controller/Session_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/add_post.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,32 +24,62 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String position = "";
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
 
   final searchController = TextEditingController();
   final searchNode = FocusNode();
   final dbref = FirebaseFirestore.instance.collection("Users");
-  String location = "Your location...";
 
-  Future getLocation() async {
-    var ref = await dbref.doc(FirebaseAuth.instance.currentUser!.uid).get();
-    setState(() {
-      location = ref.data()!['address'];
-
-    });
-  }
-
+  final List<String> carousalList = [
+    'https://firebasestorage.googleapis.com/v0/b/food-donation-and-delivery.appspot.com/o/Carousal%2Fcarousal_img_2.jpg?alt=media&token=aa86ea7b-0035-484a-8533-2c893df8b90f',
+    'https://firebasestorage.googleapis.com/v0/b/food-donation-and-delivery.appspot.com/o/Carousal%2Fcarousal_img_3.jpg?alt=media&token=41843330-9cf9-4077-b51f-ff81bb4c3bbf',
+    'https://firebasestorage.googleapis.com/v0/b/food-donation-and-delivery.appspot.com/o/Carousal%2Fcarousal_img_4.jpg?alt=media&token=103a529f-fbc5-4c55-89fd-88d5778ee157'
+  ];
   @override
   void initState() {
     // TODO: implement initState
-    getLocation();
+    _determinePosition().then((value) async {
+      List<Placemark> placemark =
+          await placemarkFromCoordinates(value.latitude, value.longitude);
+      LocationManager().local =
+          '${placemark.reversed.last.street.toString()}, ${placemark.reversed.last.administrativeArea}';
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         SystemNavigator.pop();
         return true;
       },
@@ -58,14 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: ListTile(
                     leading: GestureDetector(
-                        onTap: getLocation,
-                        child: Icon(Icons.location_on, color: Colors.white,size: 32,)),
+                        child: Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                      size: 32,
+                    )),
                     title: Text(
-                      location.toString(),
+                      LocationManager().local == null
+                          ? "Loading..."
+                          : LocationManager().local.toString(),
+                      // location.toString(),
                       style: paragraph.copyWith(
                           fontSize: 12, color: Colors.white, height: 1),
                     ),
-
                     trailing: CircleAvatar(),
                   ))),
           body: Column(
@@ -82,19 +121,59 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Icons.search,
                     label: 'Search Anything...'),
               ),
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(color: Colors.grey.shade100),
+
+              SizedBox(
+                height: 20,
               ),
+              CarouselSlider(
+                  items: [
+                    Container(
+                      color: Colors.grey.shade100,
+                      child: Image(
+                        image: AssetImage('./././asset/carousal_img_1.jpg'),
+                        fit: BoxFit.cover,
+                        width: 1000,
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey.shade100,
+                      child: Image(
+                        image: AssetImage(
+                          './././asset/carousal_img_2.jpg',
+                        ),
+                        fit: BoxFit.cover,
+                        width: 1000,
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey.shade100,
+                      child: Image(
+                        image: AssetImage('./././asset/carousal_img_3.jpg'),
+                        fit: BoxFit.cover,
+                        width: 1000,
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey.shade100,
+                      child: Image(
+                        image: AssetImage('./././asset/carousal_img_4.jpg'),
+                        fit: BoxFit.cover,
+                        width: 1000,
+                      ),
+                    ),
+                  ],
+                  options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 2.0,
+                      enlargeCenterPage: true)),
               ListTile(
                 title: Text(
                   'Recent Donations',
                   style: paragraph.copyWith(fontWeight: FontWeight.bold),
                 ),
                 trailing: GestureDetector(
-                  onTap: (){
-
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.donationScreen);
                   },
                   child: Text(
                     'See all',
@@ -103,58 +182,72 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  // itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4.0, horizontal: 24),
-                          child: Container(
-                            color: Colors.grey.shade50,
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade100,
-                                      borderRadius: BorderRadius.circular(8)),
-                                ),
-                                Expanded(
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(horizontal: 18.0),
-                                      child: Container(
-                                        height: 80,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Food Title',
-                                              style: Heading3.copyWith(fontSize: 18),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text("Restaurent Name"),
-                                            Row(
-                                              children: [
-                                                Text('time'),
-                                                SizedBox(
-                                                  width: 40,
-                                                ),
-                                                Text('qty/person')
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ))
-                              ],
-                            ),
-                          ));
-                    }),
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('donations')
+                      .snapshots(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData) {
+                      return Center(child: Text('Something went wrong'));
+                    }
+                    if (snapshot.data.docs.isEmpty) {
+                      return Center(
+                          child: Text(
+                        'No active donation available',
+                        style: paragraph,
+                      ));
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            if (RoleController().role == 'Restaurant') {
+                              if (snapshot.data.docs[index]['id'] ==
+                                  FirebaseAuth.instance.currentUser!.uid) {
+                                return CardContiner(
+                                  item: snapshot.data!.docs[index]['item'],
+                                  quantity: snapshot.data!.docs[index]
+                                      ['quantity'],
+                                  restaurentName: snapshot.data!.docs[index]
+                                      ['donated by'],
+                                  time: snapshot.data!.docs[index]['prep time'] ==
+                                          null
+                                      ? ""
+                                      : snapshot.data!.docs[index]['prep time'],
+                                  address: snapshot.data.docs[index]['location'],
+                                  status: snapshot.data.docs[index]['status'], onTap: () { snapshot.data.docs[index].delete(); },
+                                );
+                              }
+                              return Container(
+                                  height: 400,
+                                  child: Center(
+                                    child: Text(
+                                      'No active donations found!',
+                                      style: paragraph,
+                                    ),
+                                  ));
+                            }
+                            return CardContiner(
+                              item: snapshot.data!.docs[index]['item'],
+                              quantity: snapshot.data!.docs[index]['quantity'],
+                              restaurentName: snapshot.data!.docs[index]
+                                  ['donated by'],
+                              time:
+                                  snapshot.data!.docs[index]['prep time'] == null
+                                      ? ""
+                                      : snapshot.data!.docs[index]['prep time'],
+                              address: snapshot.data.docs[index]['location'],
+                              status: snapshot.data.docs[index]['status'], onTap: () {  },
+                            );
+                          }),
+                    );
+                  },
+                ),
               )
             ],
           )),

@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:food_donation_app/controller/LocationManager.dart';
+import 'package:food_donation_app/controller/Role_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
@@ -10,6 +14,8 @@ import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
 import 'package:food_donation_app/views/screens/Profile/ProfileScreen.dart';
 import 'package:food_donation_app/views/screens/home/HomeScreen.dart';
 import 'package:food_donation_app/views/screens/map/MapScreen.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -20,6 +26,19 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+
+  void getCred(){
+ FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+
+   setState(() {
+     RoleController().role = value['role'];
+     LocationManager().local = value['address'];
+   });
+ });
+
+  }
+
   final List<Widget> _list = [
     HomeScreen(),
     MapScreen(),
@@ -29,6 +48,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   int _selectedIndex = 0;
+
+
+
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+getCred();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +111,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
               GButton(
-                icon: Icons.add,
-                text: 'Add',
+                icon: Icons.dataset,
+                text: 'Donations',
                 textStyle:
                 paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
