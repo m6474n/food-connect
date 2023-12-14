@@ -17,6 +17,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final dbRef = FirebaseFirestore.instance;
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: SearchField(),
+            child: SearchField(controller: searchController, label: 'Search User', onTap: () {  },),
           ),
           StreamBuilder(
               stream:dbRef

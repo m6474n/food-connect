@@ -24,14 +24,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final auth = FirebaseAuth.instance;
 
-
-
   @override
-
-
   @override
   Widget build(BuildContext context) {
-
     final provider = Provider.of<ProfileProvider>(context, listen: true);
     return Scaffold(
       body: Container(
@@ -51,7 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
-
             if (!snapshot.hasData) {
               return Center(child: Text('Something went wrong..'));
             }
@@ -68,19 +62,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     name: document['name'],
                                     email: document['email'],
                                     phone: document['phone'],
-                                    address: document['address'])));
+                                    address: document['address'], image: document['image'],)));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(18.0),
                         child: Text(
                           'Edit Profile',
-                          style: paragraph,textAlign: TextAlign.right,
+                          style: paragraph,
+                          textAlign: TextAlign.right,
                         ),
                       )),
                 ),
                 Center(
-                    child: CircleAvatar(
-                  radius: 62,
+                    child: Container(
+                  height: 120,
+                  width: 120,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.grey.shade100),
+                  child: document['image'] == ""
+                      ? Icon(Icons.person, size: 48,color: mainColor,)
+                      : Container(
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                document['image'],
+                              ))),
+                        ),
                 )),
                 SizedBox(
                   height: 30,
@@ -120,7 +131,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
       ),
-
     );
   }
 }
@@ -161,7 +171,7 @@ class ReusableRow extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
           child: Divider(
-color: Colors.grey.shade200,
+            color: Colors.grey.shade200,
           ),
         )
       ],

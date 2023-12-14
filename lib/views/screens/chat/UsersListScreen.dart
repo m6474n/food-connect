@@ -11,7 +11,11 @@ class CreateChat extends StatefulWidget {
   State<CreateChat> createState() => _CreateChatState();
 }
 
+
+
 class _CreateChatState extends State<CreateChat> {
+
+final searchController = TextEditingController();
   final dbref =FirebaseFirestore.instance.collection('Users');
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class _CreateChatState extends State<CreateChat> {
         children: [
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: SearchField(),
+            child: SearchField(controller: searchController, label: 'Search', onTap: () {  },),
           ),
           StreamBuilder(
               stream: dbref.snapshots(),

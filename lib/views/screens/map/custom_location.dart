@@ -13,14 +13,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 import 'package:provider/provider.dart';
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+class CustomLocation extends StatefulWidget {
+  const CustomLocation({super.key});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<CustomLocation> createState() => _CustomLocationState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _CustomLocationState extends State<CustomLocation> {
   //get current location
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -54,9 +54,10 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     _determinePosition().then((value) {
-      setState(() {
-        newInitials = LatLng(value.latitude, value.longitude);
-      });
+setState(() {
+  newInitials = LatLng(value.latitude, value.longitude);
+
+});
     });
 
     // TODO: implement initState
@@ -76,12 +77,10 @@ class _MapScreenState extends State<MapScreen> {
               onPressed: () {
                 _determinePosition().then((value) async {
                   // add marker into local list
-                  provider.UpdateLocation(
-                      newAddress, value.longitude, value.latitude);
+                  provider.UpdateLocation(newAddress, value.longitude, value.latitude);
                   // create new camera position to animate
                   CameraPosition camera = CameraPosition(
-                      target: LatLng(value.latitude, value.longitude),
-                      zoom: 14);
+                      target: LatLng(value.latitude, value.longitude),zoom: 14);
                   GoogleMapController controller = await _controller.future;
                   setState(() {
                     controller
@@ -124,14 +123,12 @@ class _MapScreenState extends State<MapScreen> {
             ),
             Align(
                 alignment: Alignment.center,
-                child: searchController.text == ''
-                    ? Container()
-                    : Image(
-                        image: AssetImage(
-                          'asset/marker.png',
-                        ),
-                        height: 15,
-                      ))
+                child: searchController.text == '' ?  Container(): Image(
+                  image: AssetImage(
+                    'asset/marker.png',
+                  ),
+                  height: 15,
+                ))
           ],
         ));
   }
@@ -150,10 +147,9 @@ class _MapScreenState extends State<MapScreen> {
                 markerId: MarkerId(
                   i.toString(),
                 ),
-                position: LatLng(snapshot.data!.docs[i]['lat'],
-                    snapshot.data!.docs[i]['long']),
-                infoWindow:
-                    InfoWindow(title: snapshot.data!.docs[i]['place'])));
+                position: LatLng(snapshot.data!.docs[i]['lat'], snapshot.data!.docs[i]['long']),
+            infoWindow: InfoWindow(title: snapshot.data!.docs[i]['place'])
+            ));
           }
           return GoogleMap(
             markers: Set<Marker>.of(_markers),
@@ -169,15 +165,17 @@ class _MapScreenState extends State<MapScreen> {
                 lat = val.target.latitude;
                 long = val.target.longitude;
                 newAddress =
-                    '${_placemark.reversed.last.street.toString()}, ${_placemark.reversed.last.administrativeArea.toString()}';
+                '${_placemark.reversed.last.street.toString()}, ${_placemark.reversed.last.administrativeArea.toString()}';
 
                 searchController.text = newAddress;
               });
               print('Long:' + val.target.longitude.toString());
             },
-            initialCameraPosition:
-                CameraPosition(target: newInitials == '' ? _initialPosition : newInitials, zoom: 14),
+            initialCameraPosition: CameraPosition(
+                target: newInitials ,
+                zoom: 14),
           );
+
         });
   }
 }

@@ -69,6 +69,7 @@ class ProfileProvider extends ChangeNotifier {
                     title: Text('Camer'),
                     onTap: () {
                       pickCameraImage(context);
+                      Navigator.pop(context);
                     },
                   ),
                   ListTile(
@@ -76,6 +77,7 @@ class ProfileProvider extends ChangeNotifier {
                     title: Text('Gallery'),
                     onTap: () {
                       pickGalleryImage(context);
+                   Navigator.pop(context);
                     },
                   )
                 ],
@@ -88,14 +90,16 @@ class ProfileProvider extends ChangeNotifier {
   void uploadImage(BuildContext context) async {
     setLoading(true);
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref('/Profile Image - ' + SessionController().userId.toString());
+        .ref('/Profile Image - ' + auth.currentUser!.uid.toString());
     firebase_storage.UploadTask uploadTask = ref.putFile(File(_image!.path));
     await Future.value(uploadTask);
     final newUrl = await ref.getDownloadURL();
 
     dbRef
-        .doc(SessionController().userId)
+        .doc(auth.currentUser!.uid)
         .update({'image': newUrl.toString()}).then((value) {
+      Utils.toastMessage(
+          "user Updated Successfully", Colors.green);
       setLoading(false);
       _image = null;
     }).onError((error, stackTrace) {
@@ -104,13 +108,6 @@ class ProfileProvider extends ChangeNotifier {
     });
   }
 
-  Future<UserModel> getUserData(String email) async {
-    final snapshot =
-        await db.collection('Users').where("email", isEqualTo: email).get();
-    final userData =
-        snapshot.docs.map((e) => UserModel.fromSnapsshot(e)).single;
-    return userData;
-  }
 
   logutUser(BuildContext context){
    setLoading(true);

@@ -14,13 +14,14 @@ import 'package:food_donation_app/utility/utils.dart';
 import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
-  final String name, email, phone, address;
+  final String name, email, phone, address, image;
   const EditProfile(
       {super.key,
-        required this.name,
-        required this.email,
-        required this.phone,
-        required this.address});
+      required this.name,
+      required this.email,
+      required this.phone,
+      required this.address,
+      required this.image});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -70,130 +71,128 @@ class _EditProfileState extends State<EditProfile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade100),
+                          child: provider.image == null ? widget.image == ''
+                              ? Icon(Icons.person, size: 48,color: mainColor,)
+                              : Container(
+                            height: 120,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(widget.image),fit: BoxFit.cover)),
+                          ): Container(height: 120,width: 120,decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(image: FileImage(File(provider.image!.path)),fit: BoxFit.cover),),)
 
-            StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('Users')
-                    .doc(auth.currentUser!.uid)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(
-                      color: mainColor,
-                    );
-                  }
-                  if (!snapshot.hasData) {
-                    return Text(
-                        'Something went wrong... Please Try again later.');
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              height: 120,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.grey.shade100),
-                            ),
-                            Positioned(
-                              top: 90,
-                              left: 80,
-                              child: GestureDetector(
-                                onTap: (){
-                                  provider.pickImage(context);
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      color: mainColor,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: Colors.grey.shade100)),
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.grey.shade100,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: TextFormField(
-                            controller: nameController,
-                            decoration: InputDecoration(
-                                hintText: 'Update Name',
-                                hintStyle: paragraph,
-                                fillColor: Colors.grey.shade100,
-                                filled: true,
-                                border: OutlineInputBorder(borderSide: BorderSide.none)
+                      ),
+                      Positioned(
+                        top: 90,
+                        left: 80,
+                        child: GestureDetector(
+                          onTap: () {
+                            provider.pickImage(context);
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: mainColor,
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.grey.shade100)),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.grey.shade100,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                                hintText: 'Update Email',
-                                hintStyle: paragraph,
-                                fillColor: Colors.grey.shade100,
-                                filled: true,
-                                border: OutlineInputBorder(borderSide: BorderSide.none)
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: TextFormField(
-                            controller: phoneController,
-                            decoration: InputDecoration(
-                                hintText: 'Update Phone',
-                                hintStyle: paragraph,
-                                fillColor: Colors.grey.shade100,
-                                filled: true,
-                                border: OutlineInputBorder(borderSide: BorderSide.none)
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: TextFormField(
-                            controller: addressController,
-                            decoration: InputDecoration(
-                              hintText: 'Update Address',
-                                                            hintStyle: paragraph,
-                              fillColor: Colors.grey.shade100,
-                              filled: true,
-                              border: OutlineInputBorder(borderSide: BorderSide.none)
-                            ),
-                          ),
-                        ),
-                      ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                          hintText: 'Update Name',
+                          hintStyle: paragraph,
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
                     ),
-                  );
-                }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          hintText: 'Update Email',
+                          hintStyle: paragraph,
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: TextFormField(
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                          hintText: 'Update Phone',
+                          hintStyle: paragraph,
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: TextFormField(
+                      controller: addressController,
+                      decoration: InputDecoration(
+                          hintText: 'Update Address',
+                          hintStyle: paragraph,
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Spacer(),
             Padding(
               padding: const EdgeInsets.all(18.0),
               child: GradientButton(
                   label: 'Update',
                   onPress: () {
+                    provider.uploadImage(context);
                     dbref.update({
                       'name': nameController.text,
                       'email': emailController.text,
                       'phone': phoneController.text,
                       'address': addressController.text
                     }).then((value) {
-                      Utils.toastMessage(
-                          "user Updated Successfully", Colors.green);
+
                     }).onError((error, stackTrace) {
                       print(error.toString());
                     });

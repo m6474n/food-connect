@@ -110,68 +110,119 @@ class _DonationScreenState extends State<DonationScreen> {
                       style: paragraph,
                     ));
                   }
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          if (RoleController().role == 'Restaurant') {
-                            if (snapshot.data.docs[index]['id'] ==
-                                FirebaseAuth.instance.currentUser!.uid) {
-                              return CardContiner(
-                                item: snapshot.data!.docs[index]['item'],
-                                quantity: snapshot.data!.docs[index]
-                                    ['quantity'],
-                                restaurentName: snapshot.data!.docs[index]
-                                    ['donated by'],
-                                time: snapshot.data!.docs[index]['prep time'] ==
-                                        null
-                                    ? ""
-                                    : snapshot.data!.docs[index]['prep time'],
-                                address: snapshot.data.docs[index]['location'],
-                                status: snapshot.data.docs[index]['status'],
-                                onTap: () {snapshot.data.docs[index].delete();},
-                              );
-                            }
-                            return Container(
-                                height: 400,
-                                child: Center(
-                                  child: Text(
-                                    'No active donations found!',
-                                    style: paragraph,
-                                  ),
-                                ));
+                  if(RoleController().role == 'Restaurant'){
+                    return ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context,index){
+                          if(snapshot.data.docs[index]['id'] == FirebaseAuth.instance.currentUser!.uid){
+                            return CardContiner(
+                                              item: snapshot.data!.docs[index]['item'],
+                                              quantity: snapshot.data!.docs[index]
+                                                  ['quantity'],
+                                              restaurentName: snapshot.data!.docs[index]
+                                                  ['donated by'],
+                                              time: snapshot.data!.docs[index]['prep time'] ==
+                                                      null
+                                                  ? ""
+                                                  : snapshot.data!.docs[index]['prep time'],
+                                              address: snapshot.data.docs[index]['location'],
+                                              status: snapshot.data.docs[index]['status'],
+                                              onTap: () {},
+                                            );
                           }
-                          if (RoleController().role == 'NGO') {
-                            if (snapshot.data.docs[index]['status'] ==
-                                'active') {
-                              return CardContiner(
-                                item: snapshot.data!.docs[index]['item'],
-                                quantity: snapshot.data!.docs[index]
-                                    ['quantity'],
-                                restaurentName: snapshot.data!.docs[index]
-                                    ['donated by'],
-                                time: snapshot.data!.docs[index]['prep time'] ==
-                                        null
-                                    ? ""
-                                    : snapshot.data!.docs[index]['prep time'],
-                                address: snapshot.data.docs[index]['location'],
-                                status: snapshot.data.docs[index]['status'],
-                                onTap: () {},
-                              );
-                            }
-                            return Container(
-                                height: 400,
-                                child: Center(
-                                  child: Text(
-                                    'No donations found!',
-                                    style: paragraph,
-                                  ),
-                                ));
+                          return null ;
+
+                    });
+                  }
+                  if(RoleController().role == 'NGO'){
+                    return ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context,index){
+                          if(snapshot.data.docs[index]['status'] == 'active'){
+                            return CardContiner(
+                              item: snapshot.data!.docs[index]['item'],
+                              quantity: snapshot.data!.docs[index]
+                              ['quantity'],
+                              restaurentName: snapshot.data!.docs[index]
+                              ['donated by'],
+                              time: snapshot.data!.docs[index]['prep time'] ==
+                                  null
+                                  ? ""
+                                  : snapshot.data!.docs[index]['prep time'],
+                              address: snapshot.data.docs[index]['location'],
+                              status: snapshot.data.docs[index]['status'],
+                              onTap: () {},
+                            );
                           }
-                          return Container();
-                        }),
-                  );
+                          return null ;
+
+                        });
+
+                  }
+
+                  // return Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: ListView.builder(
+                  //       itemCount: snapshot.data!.docs.length,
+                  //       itemBuilder: (context, index) {
+                  //         if (RoleController().role == 'Restaurant') {
+                  //           if (snapshot.data.docs[index]['id'] ==
+                  //               FirebaseAuth.instance.currentUser!.uid) {
+                  //             return CardContiner(
+                  //               item: snapshot.data!.docs[index]['item'],
+                  //               quantity: snapshot.data!.docs[index]
+                  //                   ['quantity'],
+                  //               restaurentName: snapshot.data!.docs[index]
+                  //                   ['donated by'],
+                  //               time: snapshot.data!.docs[index]['prep time'] ==
+                  //                       null
+                  //                   ? ""
+                  //                   : snapshot.data!.docs[index]['prep time'],
+                  //               address: snapshot.data.docs[index]['location'],
+                  //               status: snapshot.data.docs[index]['status'],
+                  //               onTap: () {snapshot.data.docs[index].delete();},
+                  //             );
+                  //           }
+                  //           return Container(
+                  //               height: 400,
+                  //               child: Center(
+                  //                 child: Text(
+                  //                   'No active donations found!',
+                  //                   style: paragraph,
+                  //                 ),
+                  //               ));
+                  //         }
+                  //         if (RoleController().role == 'NGO') {
+                  //           if (snapshot.data.docs[index]['status'] ==
+                  //               'active') {
+                  //             return CardContiner(
+                  //               item: snapshot.data!.docs[index]['item'],
+                  //               quantity: snapshot.data!.docs[index]
+                  //                   ['quantity'],
+                  //               restaurentName: snapshot.data!.docs[index]
+                  //                   ['donated by'],
+                  //               time: snapshot.data!.docs[index]['prep time'] ==
+                  //                       null
+                  //                   ? ""
+                  //                   : snapshot.data!.docs[index]['prep time'],
+                  //               address: snapshot.data.docs[index]['location'],
+                  //               status: snapshot.data.docs[index]['status'],
+                  //               onTap: () {},
+                  //             );
+                  //           }
+                  //           return Container(
+                  //               height: 400,
+                  //               child: Center(
+                  //                 child: Text(
+                  //                   'No donations found!',
+                  //                   style: paragraph,
+                  //                 ),
+                  //               ));
+                  //         }
+                  //         return Container();
+                  //       }),
+                  // );
+                      return Container() ;
                 },
               ),
             ),

@@ -9,6 +9,7 @@ import 'package:food_donation_app/components/searchField.dart';
 import 'package:food_donation_app/controller/LocationManager.dart';
 import 'package:food_donation_app/controller/Role_manager.dart';
 import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/controller/notification_services.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/add_post.dart';
@@ -24,54 +25,63 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
-  }
+  // Future<Position> _determinePosition() async {
+  //   bool serviceEnabled;
+  //
+  //   LocationPermission permission;
+  //
+  //   // Test if location services are enabled.
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //
+  //   if (permission == LocationPermission.deniedForever) {
+  //     // Permissions are denied forever, handle appropriately.
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //
+  //   // When we reach here, permissions are granted and we can
+  //   // continue accessing the position of the device.
+  //   return await Geolocator.getCurrentPosition();
+  // }
 
   final searchController = TextEditingController();
   final searchNode = FocusNode();
   final dbref = FirebaseFirestore.instance.collection("Users");
+ String profile= '';
+ String location='Loading...';
+  Future<void> getUserData()async{
+    final ref = await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
-  final List<String> carousalList = [
-    'https://firebasestorage.googleapis.com/v0/b/food-donation-and-delivery.appspot.com/o/Carousal%2Fcarousal_img_2.jpg?alt=media&token=aa86ea7b-0035-484a-8533-2c893df8b90f',
-    'https://firebasestorage.googleapis.com/v0/b/food-donation-and-delivery.appspot.com/o/Carousal%2Fcarousal_img_3.jpg?alt=media&token=41843330-9cf9-4077-b51f-ff81bb4c3bbf',
-    'https://firebasestorage.googleapis.com/v0/b/food-donation-and-delivery.appspot.com/o/Carousal%2Fcarousal_img_4.jpg?alt=media&token=103a529f-fbc5-4c55-89fd-88d5778ee157'
-  ];
+    setState(() {
+      profile = ref['image'];
+      location = ref['address'];
+    });
+
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
-    _determinePosition().then((value) async {
-      List<Placemark> placemark =
-          await placemarkFromCoordinates(value.latitude, value.longitude);
-      LocationManager().local =
-          '${placemark.reversed.last.street.toString()}, ${placemark.reversed.last.administrativeArea}';
-    });
+    // _determinePosition().then((value) async {
+    //   List<Placemark> placemark =
+    //       await placemarkFromCoordinates(value.latitude, value.longitude);
+    //   LocationManager().local =
+    //       '${placemark.reversed.last.street.toString()}, ${placemark.reversed.last.administrativeArea}';
+    //
+    // });
+    getUserData();
 
     super.initState();
   }
@@ -105,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: paragraph.copyWith(
                           fontSize: 12, color: Colors.white, height: 1),
                     ),
-                    trailing: CircleAvatar(),
+                    trailing: CircleAvatar(backgroundImage: NetworkImage(profile),),
                   ))),
           body: Column(
             children: [
@@ -122,9 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: 'Search Anything...'),
               ),
 
-              SizedBox(
-                height: 20,
-              ),
+
               CarouselSlider(
                   items: [
                     Container(
@@ -220,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ? ""
                                       : snapshot.data!.docs[index]['prep time'],
                                   address: snapshot.data.docs[index]['location'],
-                                  status: snapshot.data.docs[index]['status'], onTap: () { snapshot.data.docs[index].delete(); },
+                                  status: snapshot.data.docs[index]['status'], onTap: () {  },
                                 );
                               }
                               return Container(
