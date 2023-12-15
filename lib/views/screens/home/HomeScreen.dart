@@ -16,6 +16,7 @@ import 'package:food_donation_app/views/add_post.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,64 +26,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Future<Position> _determinePosition() async {
-  //   bool serviceEnabled;
-  //
-  //   LocationPermission permission;
-  //
-  //   // Test if location services are enabled.
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled.');
-  //   }
-  //
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-  //
-  //   if (permission == LocationPermission.deniedForever) {
-  //     // Permissions are denied forever, handle appropriately.
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-  //
-  //   // When we reach here, permissions are granted and we can
-  //   // continue accessing the position of the device.
-  //   return await Geolocator.getCurrentPosition();
-  // }
+
 
   final searchController = TextEditingController();
   final searchNode = FocusNode();
   final dbref = FirebaseFirestore.instance.collection("Users");
- String profile= '';
- String location='Loading...';
-  Future<void> getUserData()async{
-    final ref = await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+String  location = 'loading...';
+  String profile = 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
-    setState(() {
-      profile = ref['image'];
-      location = ref['address'];
-    });
+  void getUserData()async{
+    var ref = await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+   setState(() {
+     location = ref['address'];
+     profile  = ref['image'];
+   });
 
   }
 
-
-  @override
   void initState() {
     // TODO: implement initState
-    // _determinePosition().then((value) async {
-    //   List<Placemark> placemark =
-    //       await placemarkFromCoordinates(value.latitude, value.longitude);
-    //   LocationManager().local =
-    //       '${placemark.reversed.last.street.toString()}, ${placemark.reversed.last.administrativeArea}';
-    //
-    // });
-    getUserData();
-
+getUserData();
     super.initState();
   }
 
@@ -110,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(
                       LocationManager().local == null
                           ? "Loading..."
-                          : LocationManager().local.toString(),
+                          : location,
                       // location.toString(),
                       style: paragraph.copyWith(
                           fontSize: 12, color: Colors.white, height: 1),

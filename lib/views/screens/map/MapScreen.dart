@@ -44,8 +44,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _initialPosition = LatLng(32.5671655, 74.0072032);
-  var newInitials;
+  static const LatLng _initialPosition = LatLng(32.5749544,74.0896053);
   final TextEditingController searchController = TextEditingController();
 
   String newAddress = '';
@@ -53,12 +52,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   void initState() {
-    _determinePosition().then((value) {
-      setState(() {
-        newInitials = LatLng(value.latitude, value.longitude);
-      });
-    });
-
     // TODO: implement initState
     super.initState();
   }
@@ -86,7 +79,7 @@ class _MapScreenState extends State<MapScreen> {
                   setState(() {
                     controller
                         .animateCamera(CameraUpdate.newCameraPosition(camera));
-                  });
+                  });//
                 });
               },
               backgroundColor: mainColor,
@@ -176,7 +169,7 @@ class _MapScreenState extends State<MapScreen> {
               print('Long:' + val.target.longitude.toString());
             },
             initialCameraPosition:
-                CameraPosition(target: newInitials == '' ? _initialPosition : newInitials, zoom: 14),
+                CameraPosition(target: _initialPosition, zoom: 14),
           );
         });
   }

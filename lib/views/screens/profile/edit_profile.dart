@@ -186,17 +186,8 @@ class _EditProfileState extends State<EditProfile> {
                   label: 'Update',
                   onPress: () {
                     provider.uploadImage(context);
-                    dbref.update({
-                      'name': nameController.text,
-                      'email': emailController.text,
-                      'phone': phoneController.text,
-                      'address': addressController.text
-                    }).then((value) {
-
-                    }).onError((error, stackTrace) {
-                      print(error.toString());
-                    });
-                  },
+                   provider.updateUser(nameController.text, emailController.text, phoneController.text, addressController.text)
+                 ; },
                   loading: provider.Loading),
             ),
           ],

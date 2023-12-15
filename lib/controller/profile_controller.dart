@@ -109,6 +109,22 @@ class ProfileProvider extends ChangeNotifier {
   }
 
 
+  void updateUser(name, email, phone, address){
+    dbRef.doc(auth.currentUser!.uid).update({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'address': address
+    }).then((value) {
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+
+
+  }
+
+
   logutUser(BuildContext context){
    setLoading(true);
     auth.signOut().then((value){
