@@ -88,12 +88,12 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void uploadImage(BuildContext context) async {
-    setLoading(true);
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref('/Profile Image - ' + auth.currentUser!.uid.toString());
-    firebase_storage.UploadTask uploadTask = ref.putFile(File(_image!.path));
+    // setLoading(true);
+    firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance
+        .ref('/Profile Pic - ' + auth.currentUser!.uid.toString());
+    firebase_storage.UploadTask uploadTask = storageRef.putFile(File(_image!.path));
     await Future.value(uploadTask);
-    final newUrl = await ref.getDownloadURL();
+    final newUrl = await storageRef.getDownloadURL();
 
     dbRef
         .doc(auth.currentUser!.uid)
@@ -106,6 +106,16 @@ class ProfileProvider extends ChangeNotifier {
       setLoading(false);
       Utils.toastMessage(error.toString(), Colors.red);
     });
+
+    notifyListeners();
+
+  }
+
+
+  void getUserData()async{
+
+    await  FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get();
+
   }
 
 
@@ -122,10 +132,23 @@ class ProfileProvider extends ChangeNotifier {
     });
 
 
+
   }
+  void completeUserProfile(phone, address, preference){
+    dbRef.doc(auth.currentUser!.uid).update({
+      'phone': phone,
+      'address': address,
+      'pref': preference
+    }).then((value) {
+
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
 
 
-  logutUser(BuildContext context){
+
+
+    logutUser(BuildContext context){
    setLoading(true);
     auth.signOut().then((value){
       setLoading(false);
@@ -135,4 +158,4 @@ class ProfileProvider extends ChangeNotifier {
   }
 
 
-}
+}}

@@ -6,7 +6,8 @@ import 'package:food_donation_app/controller/Role_manager.dart';
 import 'package:food_donation_app/controller/Session_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/dashboard.dart';
+import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
+import 'package:food_donation_app/views/screens/profile/complete_profile.dart';
 
 class RegisterProvider with ChangeNotifier{
 
@@ -29,7 +30,6 @@ class RegisterProvider with ChangeNotifier{
       // final user =  auth.currentUser
       final id = value.user!.uid.toString();
       // SessionController().userId = auth.currentUser!.uid;
-
       dbRef.doc(id).set({
         'id': id,
         'role': role,
@@ -43,7 +43,7 @@ class RegisterProvider with ChangeNotifier{
       });
       auth.currentUser!.updateDisplayName(name);
       RoleController().role = role;
-      Navigator.pushNamed(context, RouteName.dashboard);
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CompleteProfile()));
 
 
 

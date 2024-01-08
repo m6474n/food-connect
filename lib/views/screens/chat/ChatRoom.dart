@@ -7,7 +7,7 @@ import 'package:food_donation_app/controller/chatroomController.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/login.dart';
+import 'package:food_donation_app/views/screens/authentication/login.dart';
 import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
 import 'package:provider/provider.dart';
 

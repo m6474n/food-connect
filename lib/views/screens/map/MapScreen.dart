@@ -10,7 +10,6 @@ import 'package:food_donation_app/utility/utils.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 import 'package:provider/provider.dart';
 
 class MapScreen extends StatefulWidget {
@@ -69,8 +68,8 @@ class _MapScreenState extends State<MapScreen> {
               onPressed: () {
                 _determinePosition().then((value) async {
                   // add marker into local list
-                  provider.UpdateLocation(
-                      newAddress, value.longitude, value.latitude);
+                  // provider.UpdateLocation(
+                  //     newAddress, value.longitude, value.latitude);
                   // create new camera position to animate
                   CameraPosition camera = CameraPosition(
                       target: LatLng(value.latitude, value.longitude),
@@ -103,7 +102,7 @@ class _MapScreenState extends State<MapScreen> {
                 children: [
                   SearchField(
                     controller: searchController,
-                    label: 'Search',
+                    label: 'Your address',
                     onTap: () {},
                   ),
                   GradientButton(

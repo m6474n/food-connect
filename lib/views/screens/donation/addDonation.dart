@@ -29,6 +29,7 @@ class _AddDonationState extends State<AddDonation> {
     productController.dispose();
     qtyController.dispose();
   }
+  String? dropdownValue;
 
   // final date = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
@@ -57,7 +58,10 @@ class _AddDonationState extends State<AddDonation> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: GestureDetector(
                 onTap: () async {
-                 final TimeOfDay? prepTime = await showTimePicker(
+
+
+                  final TimeOfDay? prepTime = await showTimePicker(
+
                       context: context, initialTime: timeOfDay);
                   if (prepTime != null) {
                     setState(() {
@@ -92,25 +96,75 @@ class _AddDonationState extends State<AddDonation> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex :2,
-                    child: DonationField(
-                  controller: productController,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {},
-                  label: 'Items',
-                )),
-                SizedBox(width: 6,),
-                Expanded(
-                    child: DonationField(
-                      controller: qtyController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {},
-                      label: 'Quantity',
-                    ))
-              ],
+            Container(
+              padding: EdgeInsets.only(left: 14, right: 14),
+              alignment: Alignment.centerLeft,
+              height: 60,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.grey.shade200),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(children: [
+                      Text(
+                        'Food You Prefer :',
+                        style: paragraph.copyWith(fontSize: 16, color: mainColor),
+                      ),
+                    ]),
+                  ),
+                  Expanded(
+
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        items: const [
+                          DropdownMenuItem<String>(
+                              value: 'Veg',
+                              child: Text('Veg',
+                                  style: TextStyle(
+                                      fontSize: 16, color: textColor))),
+                          DropdownMenuItem<String>(
+                              value: 'Non-Veg',
+                              child: Text('Non-Veg',
+                                  style: TextStyle(
+                                      fontSize: 16, color: textColor)))
+                        ],
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!;
+                          });
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex :2,
+                      child: DonationField(
+                    controller: productController,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {},
+                    label: 'Items',
+                  )),
+                  SizedBox(width: 6,),
+                  Expanded(
+                      child: DonationField(
+                        controller: qtyController,
+                        keyboardType: TextInputType.number,
+                        validator: (value) {},
+                        label: 'Quantity',
+                      ))
+                ],
+              ),
             )
 
             // Aligns(
@@ -162,6 +216,7 @@ class _AddDonationState extends State<AddDonation> {
                     'donated by': FirebaseAuth.instance.currentUser!.displayName,
                     'status': status,
                     'date': dateRef,
+                    'type': dropdownValue,
                     'prep time': timeOfDay.hour,
                     "item": productController.text,
                     'quantity': qtyController.text,

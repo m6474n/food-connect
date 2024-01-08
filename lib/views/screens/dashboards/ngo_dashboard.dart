@@ -5,59 +5,69 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_donation_app/controller/LocationManager.dart';
 import 'package:food_donation_app/controller/Role_manager.dart';
+import 'package:food_donation_app/controller/notification_services.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/add_post.dart';
 import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
+import 'package:food_donation_app/views/screens/dashboards/admin_dashboard.dart';
 import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
 import 'package:food_donation_app/views/screens/Profile/ProfileScreen.dart';
+import 'package:food_donation_app/views/screens/donation/NGODonations.dart';
 import 'package:food_donation_app/views/screens/home/HomeScreen.dart';
 import 'package:food_donation_app/views/screens/map/MapScreen.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+class NgoDashboard extends StatefulWidget {
+  const NgoDashboard({Key? key}) : super(key: key);
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<NgoDashboard> createState() => _NgoDashboardState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-
-
-  void getCred(){
- FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
-
-   setState(() {
-     RoleController().role = value['role'];
-     LocationManager().local = value['address'];
-   });
- });
-
+class _NgoDashboardState extends State<NgoDashboard> {
+  void getCred() {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        RoleController().role = value['role'];
+        LocationManager().local = value['address'];
+      });
+    });
   }
 
   final List<Widget> _list = [
     HomeScreen(),
     MapScreen(),
-    DonationScreen(),
+    NGODonationScreen(),
     ChatScreen(),
     ProfileScreen(),
   ];
 
   int _selectedIndex = 0;
-
-
-
-
+  NotificationServices _services = NotificationServices();
 
 
   @override
   void initState() {
     // TODO: implement initState
-getCred();
+
+    NotificationServices().getDeviceToken().then((value) {
+      FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update(
+          {
+            'token': value
+          });
+
+      print(value);
+    });
+
+
+    getCred();
     super.initState();
   }
 
@@ -67,28 +77,27 @@ getCred();
     final height = size.height;
     final width = size.width;
 
+
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         SystemNavigator.pop();
         return true;
       },
-
-      child: Scaffold(
-
+      child:  Scaffold(
         body: _list.elementAt(_selectedIndex),
         bottomNavigationBar: Container(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 18 ),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 18),
           decoration: BoxDecoration(
-
-            color: mainColor,
+            color: Colors.white,
           ),
           child: GNav(
             gap: width * 0.01,
-            tabBackgroundColor: Colors.white,
+            tabBackgroundColor: Colors.grey.shade200,
             // tabBackgroundGradient:
             //     LinearGradient(colors: [mainColor, secondaryColor]),
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            color: Colors.white,
+            color: mainColor,
+
             activeColor: mainColor,
 
             selectedIndex: _selectedIndex,
@@ -99,34 +108,39 @@ getCred();
             },
             tabs: [
               GButton(
+                iconActiveColor: mainColor,
                 icon: Icons.home,
                 text: 'Home',
                 textStyle:
                 paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
               GButton(
+                iconActiveColor: mainColor,
                 icon: Icons.map,
                 text: 'Map',
                 textStyle:
                 paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
               GButton(
+                iconActiveColor: mainColor,
                 icon: Icons.dataset,
                 text: 'Donations',
                 textStyle:
                 paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
               GButton(
+                iconActiveColor: mainColor,
                 icon: Icons.message,
                 text: 'Message',
                 textStyle:
                 paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
               GButton(
+                iconActiveColor: mainColor,
                 icon: Icons.person,
                 text: 'Profile',
                 textStyle:
-                paragraph.copyWith(color:mainColor, fontSize: 16),
+                paragraph.copyWith(color: mainColor, fontSize: 16),
               ),
             ],
           ),

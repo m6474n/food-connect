@@ -28,13 +28,7 @@ class SearchField extends StatelessWidget {
       decoration: InputDecoration(
 
         fillColor: Colors.grey.shade100,
-        suffixIcon: GestureDetector(
-          onTap: onTap,
-          child: Icon(
-              Icons.search,
-          color: mainColor,
-          ),
-        ),
+
         hintStyle: paragraph.copyWith(color: mainColor),
         hintText: label,
         filled: true,

@@ -9,7 +9,8 @@ import 'package:food_donation_app/controller/profile_controller.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/login.dart';
+import 'package:food_donation_app/views/screens/authentication/login.dart';
+import 'package:food_donation_app/views/screens/profile/complete_profile.dart';
 import 'package:food_donation_app/views/screens/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -38,20 +39,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+
+            if (snapshot.connectionState == ConnectionState) {
+              return Center(child: CircularProgressIndicator(color: mainColor,));
+            }
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator(color: mainColor,));
+            }
+            if(snapshot.hasError){
+              return Center(child: Text('Something went wrong'));
+            }
             DocumentSnapshot data = snapshot.data!;
 
             Map<String, dynamic> document = data.data() as Map<String, dynamic>;
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (!snapshot.hasData) {
-              return Center(child: Text('Something went wrong..'));
-            }
-
             return ListView(
               children: [
                 Container(
+                  alignment: Alignment.topRight,
                   child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -72,6 +77,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       )),
                 ),
+//                 Container(
+//                   alignment: Alignment.topRight,
+//                   child: GestureDetector(
+//                       onTap: () {
+// Navigator.push(context, MaterialPageRoute(builder: (context)=> CompleteProfile()));
+//                       },
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(18.0),
+//                         child: Text(
+//                           'complete profile',
+//                           style: paragraph,
+//                           textAlign: TextAlign.right,
+//                         ),
+//                       )),
+//                 ),
                 Center(
                     child: Container(
                   height: 120,

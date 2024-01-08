@@ -14,7 +14,8 @@ class CardContiner extends StatelessWidget {
       required this.restaurentName,
       required this.time,
       required this.address,
-      required this.status, required this.onTap});
+      required this.status,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -27,53 +28,7 @@ class CardContiner extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(4),
         child: GestureDetector(
-          onTap: () {
-            if (RoleController().role == 'Restaurant') {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      height: 80,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 24.0, horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 30,
-                              width: double.infinity,
-                              child: GestureDetector(
-                                onTap: onTap,
-                                child: Text(
-                                  'Delete',
-                                  style: paragraph.copyWith(
-                                      fontSize: 20, color: Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-            }
-            if (RoleController().role == 'NGO') {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DonationDetails(
-                            img: image,
-                            item: item,
-                            restaurant: restaurant,
-                            prepTime: preptime,
-                            serving: serving,
-                            location: location,
-                          )));
-            }
-            return print('role is null');
-          },
+          onTap: onTap,
           child: Container(
             color: Colors.grey.shade100,
             child: Row(
@@ -153,7 +108,7 @@ class CardContiner extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                           text:
-                                              ' ${DateTime.now().hour - time} hours ago',
+                                              ' ${DateTime.now().hour - time == 0 ? 'Now' : DateTime.now().hour - time} hours ago',
                                           style: paragraph.copyWith(
                                               color: Colors.black,
                                               fontSize: 14)),
@@ -179,5 +134,160 @@ class CardContiner extends StatelessWidget {
             ),
           ),
         ));
+  }
+}
+
+class DonationCard extends StatelessWidget {
+  final String item, quantity, restaurentName, address, status;
+  final int time;
+  final VoidCallback onTap;
+  const DonationCard(
+      {super.key,
+        required this.item,
+        required this.quantity,
+        required this.restaurentName,
+        required this.time,
+        required this.address,
+        required this.status,
+        required this.onTap});
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    final String image = 'asset/food.jpg';
+    final String preptime = '${DateTime.now().hour - time} hours ago';
+    final String serving = '$quantity people';
+    final String restaurant = restaurentName;
+    final String location = address;
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(18)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 150,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey.shade200,
+                    image: DecorationImage(
+                        image: AssetImage(image),
+                        fit: BoxFit.cover)),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: LinearGradient(
+                          colors: [
+                            Colors.transparent,
+                            Colors.black87,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter)),
+                  child: Container(
+                    padding: EdgeInsets.all(18),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Container(
+                                child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 30,
+                                  width: 90,
+                                  child: Center(
+                                      child: Text(
+                                    preptime,
+                                    style:
+
+                                        paragraph.copyWith(
+                                            fontSize: 12,
+                                            color: Colors.white),
+                                  )),
+                                  decoration: BoxDecoration(
+                                      color: mainColor,
+                                      borderRadius: BorderRadius.circular(12)),
+                                ))
+                          ],
+                        ))),
+                        Expanded(
+                            child: Container(
+                                child: RoleController().role == "Restaurant"
+                                    ? Column(
+                                        children: [
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                height: 30,
+                                                width: 100,
+                                                child: Center(
+                                                    child: Text(
+                                                  status,
+                                                  style: paragraph.copyWith(fontSize: 12,
+                                                      color: Colors.white),
+                                                )),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12)),
+                                              ))
+                                        ],
+                                      )
+                                    : Container()))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item,
+                      style: paragraph.copyWith(
+                          color: mainColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'food type',
+                      style: paragraph.copyWith(
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      restaurant,
+                      style: paragraph.copyWith(
+                          color: Colors.black54,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Serving for : $quantity people',
+                      style: paragraph.copyWith(
+                        color: Colors.green,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

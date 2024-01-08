@@ -3,7 +3,7 @@ import 'package:food_donation_app/components/onboard_content.dart';
 import 'package:food_donation_app/models/onboard_model.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 
-import 'package:food_donation_app/views/welcome_screen.dart';
+import 'package:food_donation_app/views/screens/welcome_screens/welcome_screen.dart';
 
 class BoardingScreen extends StatefulWidget {
   const BoardingScreen({Key? key}) : super(key: key);

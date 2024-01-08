@@ -4,8 +4,8 @@ import 'package:food_donation_app/components/RoundedButton.dart';
 import 'package:food_donation_app/components/SquareButton.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
-import 'package:food_donation_app/views/login.dart';
-import 'package:food_donation_app/views/register.dart';
+import 'package:food_donation_app/views/screens/authentication/login.dart';
+import 'package:food_donation_app/views/screens/authentication/register.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

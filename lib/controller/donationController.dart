@@ -33,5 +33,17 @@ dbRef.collection('donations').doc(FirebaseAuth.instance.currentUser!.uid).set({
 
   }
 
+  void pickDonation(BuildContext context){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+
+      );
+
+    });
+
+
+  }
+
+
 
 }

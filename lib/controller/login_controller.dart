@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/dashboard.dart';
+import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
+import 'package:food_donation_app/views/screens/profile/complete_profile.dart';
 
 
 

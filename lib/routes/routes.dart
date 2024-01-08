@@ -3,20 +3,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/routes/route_name.dart';
-import 'package:food_donation_app/views/add_post.dart';
-import 'package:food_donation_app/views/boarding_screen.dart';
-import 'package:food_donation_app/views/emailValidation.dart';
-import 'package:food_donation_app/views/dashboard.dart';
-import 'package:food_donation_app/views/login.dart';
-import 'package:food_donation_app/views/register.dart';
+import 'package:food_donation_app/views/screens/welcome_screens/boarding_screen.dart';
+import 'package:food_donation_app/views/screens/authentication/emailValidation.dart';
+import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
+import 'package:food_donation_app/views/screens/authentication/login.dart';
+import 'package:food_donation_app/views/screens/authentication/register.dart';
 import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
 import 'package:food_donation_app/views/screens/chat/UsersListScreen.dart';
 import 'package:food_donation_app/views/screens/donation/DonationScreen.dart';
 import 'package:food_donation_app/views/screens/map/MapScreen.dart';
 import 'package:food_donation_app/views/screens/profile/ProfileScreen.dart';
 import 'package:food_donation_app/views/screens/donation/addDonation.dart';
-import 'package:food_donation_app/views/splash_screen.dart';
-import 'package:food_donation_app/views/welcome_screen.dart';
+import 'package:food_donation_app/views/screens/welcome_screens/splash_screen.dart';
+import 'package:food_donation_app/views/screens/welcome_screens/welcome_screen.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {

@@ -52,18 +52,18 @@ class _EditProfileState extends State<EditProfile> {
     addressController.text = widget.address;
 
     final provider = Provider.of<ProfileProvider>(context, listen: true);
-    File? _selectedImage;
     final auth = FirebaseAuth.instance;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: mainColor,
+
+
+
         title: Text(
           'Edit Profile',
           style: paragraph.copyWith(
-              fontWeight: FontWeight.bold, color: Colors.white),
+              fontWeight: FontWeight.bold, color: mainColor),
         ),
       ),
       body: Center(
