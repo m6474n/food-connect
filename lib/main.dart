@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:food_donation_app/controller/Chat_services.dart';
 import 'package:food_donation_app/controller/LocationController.dart';
 import 'package:food_donation_app/controller/Role_manager.dart';
 import 'package:food_donation_app/controller/chatroomController.dart';
@@ -60,8 +61,9 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider(create: (_)=> RegisterProvider()),
       ChangeNotifierProvider(create: (_)=> LocationController()),
       ChangeNotifierProvider(create: (_)=> ProfileProvider()),
-      ChangeNotifierProvider(create: (_)=> ChatRoomController()),
+      // ChangeNotifierProvider(create: (_)=> ChatRoomController()),
       ChangeNotifierProvider(create: (_)=> DonationController()),
+      // ChangeNotifierProvider(create: (_)=> ChatController()),
 
       // ChangeNotifierProvider(create: create)
 
@@ -83,9 +85,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
      // home: TestScreen(),
-      home: DonationMap(),
-      // initialRoute: RouteName.splashScreen,
-      // onGenerateRoute: Routes.generateRoute,
+      home: SplashScreen(),
+      initialRoute: RouteName.splashScreen,
+      onGenerateRoute: Routes.generateRoute,
     ),);
   }
 }

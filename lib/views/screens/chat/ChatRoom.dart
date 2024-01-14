@@ -1,92 +1,151 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter/material.dart';
-import 'package:food_donation_app/components/messageField.dart';
-import 'package:food_donation_app/controller/chatroomController.dart';
-import 'package:food_donation_app/routes/route_name.dart';
-import 'package:food_donation_app/utility/constants.dart';
-import 'package:food_donation_app/utility/utils.dart';
-import 'package:food_donation_app/views/screens/authentication/login.dart';
-import 'package:food_donation_app/views/screens/chat/ChatScreen.dart';
-import 'package:provider/provider.dart';
-
-class MessageScreen extends StatefulWidget {
-  final String ReceiverName;
-  final String ReceiverId;
-  const MessageScreen(
-      {super.key, required this.ReceiverName, required this.ReceiverId});
-
-  @override
-  State<MessageScreen> createState() => _MessageScreenState();
-}
-
-class _MessageScreenState extends State<MessageScreen> {
-  TextEditingController messageController = TextEditingController();
- FirebaseAuth auth = FirebaseAuth.instance;
- FirebaseFirestore dbRef = FirebaseFirestore.instance;
-
-  @override
-  Widget build(BuildContext context) {
-    String chatRoomId = '${auth.currentUser!.uid}_${widget.ReceiverId}';
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.ReceiverName),
-      ),
-      body: StreamBuilder(
-        stream: dbRef.collection('chat_room').doc(chatRoomId).collection('messages').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(child: CircularProgressIndicator());
-          }
-          if(!snapshot.hasData){
-            return Text('Something went wrong!');
-          }
-          return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context,index){
-
-                var alignment = (snapshot.data.docs[index]['sender'] == auth.currentUser!.uid)? Alignment.centerRight:Alignment.centerLeft;
-return Message(message:snapshot.data.docs[index]['message'], alignment: alignment,);
-
-                    });
-        },
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 8),
-
-        child: Row(
-          children: [
-            Expanded(
-                child: MessageField(
-                    label: 'Type anything...', controller: messageController)), IconButton(onPressed: (){}, icon: Icon(Icons.send, color: mainColor,size: 32,))
-          ],
-        ),
-      ),
-    );
-
-  }
-
-}
-
-class Message extends StatelessWidget {
-  final String message;
-  final Alignment alignment;
-
-  const Message({super.key, required this.message, required this.alignment});
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        // alignment: alignment,
-        margin: EdgeInsets.all(4),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(color: mainColor,
-        borderRadius: BorderRadius.circular(12)
-        ),
-        child: Text(message,style: paragraph.copyWith(color: Colors.white),),),
-    );
-  }
-}
+// import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:food_donation_app/utility/constants.dart';
+//
+//
+// class ChatRoom extends StatefulWidget {
+//   final String senderId;
+//   final String receiverId;
+//   final String Name;
+//   ChatRoom({
+//     required this.senderId,
+//     required this.receiverId,
+//     required this.Name,
+//   });
+//
+//   @override
+//   State<ChatRoom> createState() => _ChatRoomState();
+// }
+//
+// class _ChatRoomState extends State<ChatRoom> {
+//   late CollectionReference<Map<String, dynamic>> messagesCollection;
+//   TextEditingController _messageController = TextEditingController();
+//   late Stream<QuerySnapshot<Map<String, dynamic>>> _messagesStream;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//
+//     String chatId = createChatId(widget.senderId, widget.receiverId);
+//     messagesCollection =
+//         FirebaseFirestore.instance.collection('messages_$chatId');
+//
+//     _messagesStream = messagesCollection
+//         .orderBy('timestamp', descending: true)
+//         .snapshots();
+//   }
+//
+//   String createChatId(String senderId, String receiverId) {
+//     List<String> ids = [senderId, receiverId];
+//     ids.sort();
+//     return ids.join('_');
+//   }
+//
+//   void _sendMessage() {
+//     String message = _messageController.text.trim();
+//     if (message.isNotEmpty) {
+//       messagesCollection.add({
+//         'message': _messageController.text.toString(),
+//         'senderId': widget.senderId,
+//         'receiverId': widget.receiverId,
+//         'timestamp': FieldValue.serverTimestamp(),
+//       });
+//       _messageController.clear();
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('${widget.Name}', style: TextStyle(color: Colors.white)),
+//         backgroundColor: mainColor,
+//       ),
+//       body: Column(
+//         children: [
+//           Expanded(
+//             child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+//               stream: _messagesStream,
+//               builder: (context, snapshot) {
+//                 if (snapshot.connectionState == ConnectionState.waiting) {
+//                   return Center(
+//                     child: CircularProgressIndicator(),
+//                   );
+//                 } else if (!snapshot.hasData ||
+//                     snapshot.data!.docs.isEmpty) {
+//                   return Center(
+//                     child: Text('No messages yet.'),
+//                   );
+//                 }
+//
+//                 List<DocumentSnapshot<Map<String, dynamic>>> messages =
+//                     snapshot.data!.docs;
+//
+//                 return ListView.builder(
+//                   reverse: true,
+//                   itemCount: messages.length,
+//                   itemBuilder: (context, index) {
+//                     var message = messages[index].data();
+//                     bool isSentBySender =
+//                         message!['senderId'] == widget.senderId;
+//
+//                     return Padding(
+//                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+//                       child: Container(
+//                         color:
+//                         isSentBySender ? mainColor : textColor,
+//                         child:  ListTile(
+//                           title: Text(message!['message'],
+//                             textAlign:
+//                             isSentBySender ? TextAlign.end : TextAlign.start,
+//                             style: TextStyle(
+//                               color: isSentBySender ? Colors.white : Colors.white,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
+//                           subtitle: Text(
+//                             isSentBySender ? 'You' : widget.Name,
+//                             textAlign:
+//                             isSentBySender ? TextAlign.end : TextAlign.start,
+//                             style: TextStyle(
+//                               color: isSentBySender ? Colors.white : Colors.black,
+//                             ),
+//
+//                           ),
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//           Padding(
+//             padding: EdgeInsets.all(8.0),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Expanded(
+//                   child: TextFormField(
+//                     controller: _messageController,
+//                     decoration: InputDecoration(
+//                       hintText: 'Type your message...',
+//                       border: OutlineInputBorder(
+//                         borderRadius: BorderRadius.all(Radius.circular(50)),
+//                         borderSide: BorderSide(color: Colors.grey),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.send, color: mainColor),
+//                   onPressed: _sendMessage,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

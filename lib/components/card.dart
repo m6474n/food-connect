@@ -138,7 +138,7 @@ class CardContiner extends StatelessWidget {
 }
 
 class DonationCard extends StatelessWidget {
-  final String item, quantity, restaurentName, address, status;
+  final String item, quantity, restaurentName, address, status, type;
   final int time;
   final VoidCallback onTap;
   const DonationCard(
@@ -149,7 +149,7 @@ class DonationCard extends StatelessWidget {
         required this.time,
         required this.address,
         required this.status,
-        required this.onTap});
+        required this.onTap, required this.type});
 
 
 
@@ -262,7 +262,7 @@ class DonationCard extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'food type',
+                      type,
                       style: paragraph.copyWith(
                         fontSize: 12,
                       ),

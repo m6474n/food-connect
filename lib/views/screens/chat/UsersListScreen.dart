@@ -46,7 +46,7 @@ final searchController = TextEditingController();
 
                           return ListTile(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (_)=> MessageScreen(ReceiverName: snapshot.data!.docs[index]['name'], ReceiverId: snapshot.data!.docs[index]['id'])));
+                              // Navigator.push(context, MaterialPageRoute(builder: (_)=> ChatRoom(ReceiverName: snapshot.data!.docs[index]['name'], ReceiverId: snapshot.data!.docs[index]['id'])));
                             },
                             leading: CircleAvatar(),
                             title: Text(snapshot.data!.docs[index]['name']),

@@ -73,7 +73,7 @@ class _DonationDetailsState extends State<DonationDetails> {
                                     child: GestureDetector(
                                       onTap: (){
                                        // popUp(context);
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DonationMap()));
+                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=> DonationMap()));
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(12)),

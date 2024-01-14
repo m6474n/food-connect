@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/routes/route_name.dart';
+import 'package:food_donation_app/views/screens/donation/NGODonations.dart';
 import 'package:food_donation_app/views/screens/welcome_screens/boarding_screen.dart';
 import 'package:food_donation_app/views/screens/authentication/emailValidation.dart';
 import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
@@ -45,8 +46,8 @@ class Routes {
         return MaterialPageRoute(builder: (_)=>  ValidationScreen());
       case RouteName.addDonation:
         return MaterialPageRoute(builder: (_)=>  AddDonation());
-      case RouteName.createChat:
-        return MaterialPageRoute(builder: (_)=>  CreateChat());
+      case RouteName.ngoDonation:
+        return MaterialPageRoute(builder: (_)=>  NGODonationScreen());
       default:
         return MaterialPageRoute(builder: (_) {
           return Scaffold(

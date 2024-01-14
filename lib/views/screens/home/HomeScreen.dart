@@ -12,6 +12,9 @@ import 'package:food_donation_app/controller/Session_manager.dart';
 import 'package:food_donation_app/controller/notification_services.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:food_donation_app/views/screens/donation/NGODonations.dart';
+import 'package:food_donation_app/views/screens/donation/donationDetails.dart';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -163,14 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                height: 120,
-                color: Colors.black87,
-              ),
+              // Container(
+              //   height: 120,
+              //   color: Colors.black87,
+              // ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 height: 60,
-
                 child: Row(
                   children: [
                     Expanded(
@@ -178,17 +180,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text('Recent Donations',
                           style:
                               paragraph.copyWith(fontWeight: FontWeight.bold)),
-                    )),Expanded(
+                    )),
+                    Expanded(
                         child: GestureDetector(
-                          onTap: (){
-                            Navigator.pushNamed(context, RouteName.donationScreen);
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            child: Text('See all',
-                                style: paragraph.copyWith(color: mainColor),),
-                          ),
-                        ))
+                      onTap: () {
+                        RoleController().role == "Restaurant"
+                            ? Navigator.pushNamed(
+                                context, RouteName.donationScreen)
+                            : Navigator.pushNamed(
+                                context, RouteName.ngoDonation);
+                        ;
+                      },
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'See all',
+                          style: paragraph.copyWith(color: mainColor),
+                        ),
+                      ),
+                    ))
                   ],
                 ),
               ),
@@ -238,7 +248,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     address: snapshot.data.docs[index]
                                         ['location'],
                                     status: snapshot.data.docs[index]['status'],
-                                    onTap: () {},
+                                    onTap: () {
+                                      showDialog(context: context, builder: (context){
+                                        return AlertDialog(
+                                          content: Container(child: Column(children: [Container(child: Text('Delete'),)],),
+                                          ),
+                                        );
+                                      });
+                                    }, type: snapshot.data.docs[index]['type'],
                                   );
                                 }),
                           );
@@ -289,7 +306,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     address: snapshot.data.docs[index]
                                         ['location'],
                                     status: snapshot.data.docs[index]['status'],
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DonationDetails()));
+                                    }, type: snapshot.data!.docs[index]['type'],
                                   );
                                 }),
                           );

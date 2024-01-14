@@ -102,7 +102,7 @@ class _DonationScreenState extends State<DonationScreen> {
                             : snapshot.data!.docs[index]['prep time'],
                         address: snapshot.data!.docs[index]['location'],
                         status: snapshot.data!.docs[index]['status'],
-                        onTap: () {}
+                        onTap: () {}, type:  snapshot.data!.docs[index]['status'],
                       );
                     }),
               );

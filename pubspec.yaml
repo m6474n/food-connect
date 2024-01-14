@@ -58,6 +58,8 @@ dependencies:
   flutter_localization:
   intl: any
   flutter_polyline_points: ^2.0.0
+  google_map_polyline_new: ^0.3.0+2
+  flutter_chat_bubble: ^2.0.2
 
 
 dev_dependencies:

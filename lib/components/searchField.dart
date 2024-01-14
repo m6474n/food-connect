@@ -8,7 +8,7 @@ class SearchField extends StatelessWidget {
     required this.controller,
     required this.label,
 
-    Key? key, required this.onTap,
+    Key? key, required this.onTap, this.onChanged,
   }) : super(key: key);
 
   TextEditingController controller = TextEditingController();
@@ -16,7 +16,7 @@ class SearchField extends StatelessWidget {
   IconData? icon;
   final String label;
   final VoidCallback onTap;
-
+  final ValueChanged<String>? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -24,11 +24,13 @@ class SearchField extends StatelessWidget {
 
       cursorColor: mainColor,
 
-
+onChanged: onChanged,
       decoration: InputDecoration(
 
         fillColor: Colors.grey.shade100,
-
+suffixIcon: GestureDetector(
+    onTap: onTap,
+    child: Icon(Icons.search)),
         hintStyle: paragraph.copyWith(color: mainColor),
         hintText: label,
         filled: true,
@@ -38,13 +40,13 @@ class SearchField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12)),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.red, width: 1)),
+            borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: mainColor, width: 1)),
+            borderSide: BorderSide.none),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.red, width: 1)),
+            borderSide: BorderSide.none),
       ),
     );
   }

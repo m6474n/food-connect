@@ -14,6 +14,8 @@ class RouteName{
     static const String dashboard   = 'dashboard';
     static const String createChat   = 'createChat';
     static const String donationDetails   = 'donationDetails';
+    static const String ngoDonation   = 'ngoDonation';
+
 
 
 

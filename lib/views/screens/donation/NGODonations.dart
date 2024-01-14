@@ -68,7 +68,7 @@ class _NGODonationScreenState extends State<NGODonationScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DonationDetails()));
-                      });
+                      }, type:  snapshot.data!.docs[index]['type'],);
                 });
           },
         ),

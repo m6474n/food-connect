@@ -5,7 +5,7 @@ const Color mainColor = Color(0xfff15a29);
 
 const Color textColor = Color(0xff939393);
 const Color secondaryColor = Color(0xffbe1e2d);
-
+const String GoogleMapApi = 'AIzaSyA9KKPWiQYya6v-XOpsR6dZbM7vsM_JBBQ';
 TextStyle Heading1 = GoogleFonts.openSans(
     fontSize: 40, fontWeight: FontWeight.bold, color: mainColor, height: 1);
 TextStyle Heading2 = GoogleFonts.openSans(
