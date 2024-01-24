@@ -3,8 +3,8 @@
 A revolutionary app designed to create a meaningful connection between restaurants, hotels and compassionate individuals, all working together to combat food wastage and alternate hunger in our communities.
 
 ## Roles
-- ##Admin
-
+- Admin
+-- Manage Users
 
 
 - ##Restaurent
