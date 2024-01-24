@@ -6,13 +6,12 @@ A revolutionary app designed to create a meaningful connection between restauran
 
 - Admin
 
--- Manage Users
 
 
-- ##Restaurent
+- Restaurent
 
 
-- ##NGO
+- NGO
 ## Getting Started
 
 This project is a starting point for a Flutter application.
