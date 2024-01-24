@@ -5,13 +5,24 @@ A revolutionary app designed to create a meaningful connection between restauran
 ## Roles
 
 - Admin
-
+  - Manage all the users( Add, remove and update)
+  - Manage Donations.
 
 
 - Restaurent
+  - List new donations
+  - Manage their profile.
+  - Chat with NGOs
+  - Update their location
+     
 
 
 - NGO
+  - Manage thier Profile
+  - See and Get donations from all the available Restaurants
+  - Chat with Restaurents
+  - Track the real time location of donation
+    
 ## Getting Started
 
 This project is a starting point for a Flutter application.
