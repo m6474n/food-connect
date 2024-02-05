@@ -4,6 +4,7 @@ import 'package:food_donation_app/models/onboard_model.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 
 import 'package:food_donation_app/views/screens/welcome_screens/welcome_screen.dart';
+import 'package:get/get.dart';
 
 class BoardingScreen extends StatefulWidget {
   const BoardingScreen({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
 
   void nextPage() {
     _controller.page == data.length - 1
-        ? Navigator.pushNamed(context, RouteName.welcomScreen)
+        ? Get.to(WelcomeScreen())
         : _controller.nextPage(
             duration: const Duration(milliseconds: 400), curve: Curves.ease);
   }
@@ -43,17 +44,17 @@ class _BoardingScreenState extends State<BoardingScreen> {
 
   final List<OnBoard> data = [
     OnBoard(
-        text: 'No Food Waste!',
+        text: 'no_food_waste!'.tr,
         paragraph:
-            "One third of all food produced is lost or wasted, around 1.3 billion tonnes of food.",
+            "first_screen_description".tr,
         image: "asset/banner 1.jpg"),
     OnBoard(
-        text: 'We are in it together.',
-        paragraph: "We can be the generation that ends hunger",
+        text: 'we_are_in_it_together'.tr,
+        paragraph: "second_screen_description".tr,
         image: "asset/banner 2.jpg"),
     OnBoard(
-        text: 'Just one tap.',
-        paragraph: "Makes a difference in people's lives with just one tap.",
+        text: 'just_one_tap'.tr,
+        paragraph: "third_screen_description".tr,
         image: "asset/banner 3.jpg"),
   ];
 

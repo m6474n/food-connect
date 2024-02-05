@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_app/controller/Role_manager.dart';
+import 'package:food_donation_app/Services/Role_manager.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/donation/donationDetails.dart';
+import 'package:get/get.dart';
 
 class CardContiner extends StatelessWidget {
   final String item, quantity, restaurentName, address, status;
@@ -156,7 +157,7 @@ class DonationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String image = 'asset/food.jpg';
-    final String preptime = '${DateTime.now().hour - time} hours ago';
+    final String preptime = '${DateTime.now().hour - time}' +'hours ago'.tr;
     final String serving = '$quantity people';
     final String restaurant = restaurentName;
     final String location = address;
@@ -231,7 +232,7 @@ class DonationCard extends StatelessWidget {
                                                 width: 100,
                                                 child: Center(
                                                     child: Text(
-                                                  status,
+                                                  status.tr,
                                                   style: paragraph.copyWith(fontSize: 12,
                                                       color: Colors.white),
                                                 )),
@@ -262,7 +263,7 @@ class DonationCard extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      type,
+                      type.tr,
                       style: paragraph.copyWith(
                         fontSize: 12,
                       ),
@@ -275,7 +276,7 @@ class DonationCard extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Serving for : $quantity people',
+                      "serving_for".tr+ quantity+ 'people'.tr,
                       style: paragraph.copyWith(
                         color: Colors.green,
                         fontSize: 12,

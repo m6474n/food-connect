@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_donation_app/controller/notificationController.dart';
+import 'package:food_donation_app/controller/notification_services.dart';
 import 'package:food_donation_app/models/message_model.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
+import 'package:get/get.dart';
 
 class ChatServices extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  NotificationController controller = Get.put(NotificationController());
 
   Future<void> sendMessage(String receiverId, String message) async {
+
 //     get user info
     final String currentUserId = auth.currentUser!.uid;
     final String currentUserEmail = auth.currentUser!.email.toString();
@@ -36,7 +41,19 @@ class ChatServices extends ChangeNotifier {
         .collection('messages')
         .add(newMessage.toMap());
 
+
+    //send notification
+
+NotifyUser(receiverId, message);
+
+   // controller.sendMessageNotification(auth.currentUser!.displayName.toString(), message, token)
+
+
+
     // Get Messages from Database
+
+
+
 
     Stream<QuerySnapshot> getMessages(String userId, String otherUSerId) {
       List<String> ids = [userId, otherUSerId];
@@ -50,4 +67,12 @@ class ChatServices extends ChangeNotifier {
           .snapshots();
     }
   }
+  NotifyUser(String receiverId, String message)async{
+    final data = await  FirebaseFirestore.instance.collection('Devices').doc(receiverId).get();
+    var token = data['token'];
+
+    controller.sendMessageNotification(auth.currentUser!.displayName.toString(), message, token);
+
+  }
+
 }

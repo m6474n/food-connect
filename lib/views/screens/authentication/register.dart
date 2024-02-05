@@ -7,6 +7,7 @@ import 'package:food_donation_app/components/passwordField.dart';
 import 'package:food_donation_app/controller/register_controller.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:get/get.dart';
 import 'package:food_donation_app/utility/utils.dart';
 import 'package:food_donation_app/views/screens/authentication/login.dart';
 import 'package:provider/provider.dart';
@@ -74,13 +75,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Center(
                   child: Text(
-                    "Sign Up",
+                    "sign_up".tr,
                     style: Heading1.copyWith(height: 1.3),
                   ),
                 ),
                 Center(
                   child: Text(
-                    "Create your account",
+                    "create_your_account".tr,
                     style: paragraph,
                   ),
                 ),
@@ -105,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                                 child: Row(children: [
                                   Icon(Icons.business, color:Colors.black87,),SizedBox(width: 12,)
-                                  , Text('Are you:',style: paragraph.copyWith(fontSize: 18, color: mainColor,),),
+                                  , Text('are_you:'.tr,style: paragraph.copyWith(fontSize: 18, color: mainColor,),),
                                 ])
                             ),),Expanded(child:
                             Center(
@@ -131,26 +132,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         InputField(
-                          label: 'Full Name',
+                          label: 'full_name'.tr,
                           keyboardType: TextInputType.text,
                           controller: nameController,
                           focusNode: nameNode,
                           icon: Icons.person,
                           validator: (value) {
-                            return value.isEmpty ? 'Enter Name' : null;
+                            return value.isEmpty ? 'enter_name'.tr : null;
                           },
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         InputField(
-                          label: 'Email',
+                          label: 'email'.tr,
                           keyboardType: TextInputType.emailAddress,
                           controller: emailController,
                           focusNode: emailNode,
                           icon: Icons.mail,
                           validator: (value) {
-                            return value.isEmpty ? 'Enter Email' : null;
+                            return value.isEmpty ? 'enter_email'.tr : null;
                           },
                         ),
                         SizedBox(
@@ -162,10 +163,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           focusNode: passNode,
                           validator: (value) {
                             return value.isEmpty
-                                ? 'Enter Password'
+                                ? 'enter_password'.tr
                                 : null;
                           },
-                          label: 'Password',
+                          label: 'password'.tr,
                           keyboardType: TextInputType.visiblePassword,
 
                         ),
@@ -190,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         GradientButton(
                           loading: provider.isLoading,
-                          label: 'Create Account',
+                          label: 'create_account'.tr,
                           onPress: () {
                             if(_formKey.currentState!.validate()){
                               provider.signup(
@@ -212,16 +213,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Already have an account?",
+                      "already_have_an_account?".tr,
                       style: paragraph,
                     ),
                     TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, RouteName.loginScreen);
+                         Get.to(LoginScreen());
                         },
                         child: Text(
-                          "Login.",
+                          "login".tr,
                           style: paragraph.copyWith(color: mainColor),
                         ))
                   ],

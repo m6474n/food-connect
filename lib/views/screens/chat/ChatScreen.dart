@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/searchField.dart';
-import 'package:food_donation_app/controller/Chat_services.dart';
-import 'package:food_donation_app/controller/Role_manager.dart';
+import 'package:food_donation_app/Services/Chat_services.dart';
+import 'package:food_donation_app/Services/Role_manager.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/chat/ChatPage.dart';
-import 'package:food_donation_app/views/screens/chat/ChatRoom.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // final provider = Provider.of<ChatController>(context, listen: true);
 
     return Scaffold(
-        appBar: AppBar(automaticallyImplyLeading: false, title: Text(RoleController().role == "Restaurant"? "Available NGO's":"Available Restaurants", style: paragraph.copyWith(fontSize: 24, color:mainColor),)),
+        appBar: AppBar(automaticallyImplyLeading: false, title: Text(RoleController().role == "Restaurant"? "available_NGOs".tr:"available_restaurants".tr, style: paragraph.copyWith(fontSize: 24, color:mainColor),)),
         body: Container(
           child: Column(
             children: [
@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: const EdgeInsets.all(12.0),
                 child: SearchField(
                   controller: _searchController,
-                  label: 'Search',
+                  label: 'search'.tr,
                   onTap: () {},
                   onChanged: (String value) {
                     setState(() {});
@@ -65,16 +65,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                     child: ListTile(
                                       onTap: () {
                                         // provider.createChatRoom(FirebaseAuth.instance.currentUser!.uid, snapshot.data!.docs[index]['id']);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => ChatPage(
-                                                    receiverUserEmail: snapshot
+                                       Get.to(ChatPage(
+                                                    receiverUserName: snapshot
                                                         .data!
                                                         .docs[index]['name'],
                                                     receiverUserId: snapshot
                                                         .data!
-                                                        .docs[index]['id'])));
+                                                        .docs[index]['id']));
                                       },
                                       leading: snapshot.data!.docs[index]
                                                   ['image'] ==
@@ -106,16 +103,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                     child: ListTile(
                                       onTap: () {
                                         // provider.createChatRoom(FirebaseAuth.instance.currentUser!.uid, snapshot.data!.docs[index]['id']);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => ChatPage(
-                                                    receiverUserEmail: snapshot
+                                      Get.to(ChatPage(
+                                                    receiverUserName: snapshot
                                                         .data!
                                                         .docs[index]['name'],
                                                     receiverUserId: snapshot
                                                         .data!
-                                                        .docs[index]['id'])));
+                                                        .docs[index]['id']));
                                       },
                                       leading: snapshot.data!.docs[index]
                                                   ['image'] ==
@@ -166,16 +160,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                 child: ListTile(
                                   onTap: () {
                                     // provider.createChatRoom(FirebaseAuth.instance.currentUser!.uid, snapshot.data!.docs[index]['id']);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ChatPage(
-                                                receiverUserEmail: snapshot
+                                  Get.to( ChatPage(
+                                                receiverUserName: snapshot
                                                     .data!
                                                     .docs[index]['name'],
                                                 receiverUserId: snapshot
                                                     .data!
-                                                    .docs[index]['id'])));
+                                                    .docs[index]['id']));
                                   },
                                   leading: snapshot.data!.docs[index]
                                   ['image'] ==
@@ -207,16 +198,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                 child: ListTile(
                                   onTap: () {
                                     // provider.createChatRoom(FirebaseAuth.instance.currentUser!.uid, snapshot.data!.docs[index]['id']);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ChatPage(
-                                                receiverUserEmail: snapshot
+                                   Get.to(ChatPage(
+                                                receiverUserName: snapshot
                                                     .data!
                                                     .docs[index]['name'],
                                                 receiverUserId: snapshot
                                                     .data!
-                                                    .docs[index]['id'])));
+                                                    .docs[index]['id']));
                                   },
                                   leading: snapshot.data!.docs[index]
                                   ['image'] ==

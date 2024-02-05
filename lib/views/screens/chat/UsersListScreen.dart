@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/searchField.dart';
 import 'package:food_donation_app/utility/constants.dart';
-import 'package:food_donation_app/views/screens/chat/ChatRoom.dart';
 class CreateChat extends StatefulWidget {
   const CreateChat({super.key});
 

@@ -6,6 +6,7 @@ import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/authentication/login.dart';
 import 'package:food_donation_app/views/screens/authentication/register.dart';
+import 'package:get/get.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -26,11 +27,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Welcome',
+                'welcome'.tr,
                 style: Heading1,
               ),
               Text(
-                'Start your helping journey',
+                'start_your_helping_journey'.tr,
                 style: paragraph,
               ),
               SizedBox(
@@ -43,11 +44,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 80,
               ),
               RoundedButton(
-                label: 'Login',
+                label: 'login'.tr,
                 loading: false,
                 bgColor: mainColor,
                 onPress: () {
-                  Navigator.pushNamed(context, RouteName.loginScreen);
+                  Get.to(LoginScreen());
                 },
                 labelColor: Colors.white,
               ),
@@ -56,56 +57,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               RoundedButton(
                 loading: false,
-                label: 'Register',
+                label: 'register'.tr,
                 bgColor: Colors.grey.shade400,
                 onPress: () {
-                  // showModalBottomSheet(
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       return Container(
-                  //         padding: EdgeInsets.symmetric(horizontal: 80),
-                  //         height: 150,
-                  //         width: double.infinity,
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           children: [
-                  //             SquareButton(
-                  //               image: 'asset/donar.png',
-                  //               text: 'Doner',
-                  //             ),
-                  //             SquareButton(
-                  //               image: 'asset/receiver.png',
-                  //               text: 'Receiver',
-                  //             )
-                  //           ],
-                  //         ),
-                  //       );
-                  //     });
-                  Navigator.pushNamed(context, RouteName.registerScreen);
+
+                  Get.to(RegisterScreen());
                 },
                 labelColor: Colors.white,
               ),
 
-              ////////////////    Continue with social //////////////////////
-
-              // Text(
-              //   "Or Continue with",
-              //   style: Heading3.copyWith(
-              //
-              //       fontSize: 16
-              //       ),
-              // ),
-              //
-              //         Container(
-              //           height: 50,width: 100,
-              //           // color: Colors.red,
-              //           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //             children: [
-              //               Image.asset('asset/facebook.png'),
-              //               Image.asset('asset/google.png'),
-              //             ],
-              //           ),
-              //         )
             ],
           ),
         ),

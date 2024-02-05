@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/GradientButton.dart';
-import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/Services/Session_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
 

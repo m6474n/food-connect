@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:food_donation_app/components/InputField.dart';
 import 'package:food_donation_app/components/messageField.dart';
-import 'package:food_donation_app/controller/Chat_services.dart';
+import 'package:food_donation_app/Services/Chat_services.dart';
 import 'package:food_donation_app/controller/chatroomController.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:get/get.dart';
 
 class ChatPage extends StatefulWidget {
-  final String receiverUserEmail;
+  final String receiverUserName;
   final String receiverUserId;
 
   const ChatPage(
       {super.key,
-      required this.receiverUserEmail,
+      required this.receiverUserName,
       required this.receiverUserId});
 
   @override
@@ -52,7 +53,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverUserEmail),
+        title: Text(widget.receiverUserName),
       ),
       body: Column(
         children: [
@@ -127,7 +128,7 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
               child: Container(
                   child: MessageField(
-            label: 'Enter message',
+            label: 'enter_message'.tr,
             controller: messageController,
           ))),
           IconButton(onPressed: sendMessage, icon: Icon(Icons.send, size: 48,color: mainColor,))

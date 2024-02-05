@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/components/RoundedButton.dart';
-import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/Services/Session_manager.dart';
 import 'package:food_donation_app/controller/profile_controller.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
@@ -12,6 +12,7 @@ import 'package:food_donation_app/utility/utils.dart';
 import 'package:food_donation_app/views/screens/authentication/login.dart';
 import 'package:food_donation_app/views/screens/profile/complete_profile.dart';
 import 'package:food_donation_app/views/screens/profile/edit_profile.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -49,9 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if(snapshot.hasError){
               return Center(child: Text('Something went wrong'));
             }
-            DocumentSnapshot data = snapshot.data!;
-
-            Map<String, dynamic> document = data.data() as Map<String, dynamic>;
+            // DocumentSnapshot data = snapshot.data!;
+            //
+            // Map<String, dynamic> document = data.data() as Map<String, dynamic>;
 
             return ListView(
               children: [
@@ -59,46 +60,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile(
-                                    name: document['name'],
-                                    email: document['email'],
-                                    phone: document['phone'],
-                                    address: document['address'], image: document['image'],)));
+                     Get.to(EditProfile(
+                                    name: snapshot.data!['name'],
+                                    email: snapshot.data!['email'],
+                                    phone: snapshot.data!['phone'],
+                                    address: snapshot.data!['address'], image: snapshot.data!['image'],));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(18.0),
                         child: Text(
-                          'Edit Profile',
+                          'edit_profile'.tr,
                           style: paragraph,
                           textAlign: TextAlign.right,
                         ),
                       )),
                 ),
-//                 Container(
-//                   alignment: Alignment.topRight,
-//                   child: GestureDetector(
-//                       onTap: () {
-// Navigator.push(context, MaterialPageRoute(builder: (context)=> CompleteProfile()));
-//                       },
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(18.0),
-//                         child: Text(
-//                           'complete profile',
-//                           style: paragraph,
-//                           textAlign: TextAlign.right,
-//                         ),
-//                       )),
-//                 ),
+//
+//
                 Center(
                     child: Container(
                   height: 120,
                   width: 120,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Colors.grey.shade100),
-                  child: document['image'] == ""
+                  child:snapshot.data!['image'] == ""
                       ? Icon(Icons.person, size: 48,color: mainColor,)
                       : Container(
                           height: 120,
@@ -108,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                   image: NetworkImage(
-                                document['image'],
+                               snapshot.data!['image']
                               ))),
                         ),
                 )),
@@ -116,20 +101,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 30,
                 ),
                 ReusableRow(
-                    title: 'Name',
-                    value: document!['name'],
+                    title: 'name'.tr,
+                    value: snapshot.data!['name'],
                     iconData: Icons.person),
                 ReusableRow(
-                    title: 'Email',
-                    value: document!['email'],
+                    title: 'email'.tr,
+                    value: snapshot.data!['email'],
                     iconData: Icons.mail),
                 ReusableRow(
-                    title: 'Phone',
-                    value: document!['phone'],
+                    title: 'phone'.tr,
+                    value: snapshot.data!['phone'],
                     iconData: Icons.phone),
                 ReusableRow(
-                    title: 'Address',
-                    value: document!['address'],
+                    title: 'address'.tr,
+                    value: snapshot.data!['address'],
                     iconData: Icons.home),
                 SizedBox(
                   height: 40,
@@ -137,10 +122,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: GradientButton(
-                      label: 'Logout',
+                      label: 'logout'.tr,
                       onPress: () {
                         auth.signOut().then((value) {
-                          Navigator.pushNamed(context, RouteName.loginScreen);
+                       Get.back();
+                       Get.to(LoginScreen());
                         });
                       },
                       loading: false),
@@ -172,7 +158,8 @@ class ReusableRow extends StatelessWidget {
         ListTile(
           title: Text(
             title,
-            style: paragraph,
+            style: paragraph.copyWith(fontSize: 18 ),
+
           ),
           leading: Icon(
             iconData,

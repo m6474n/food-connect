@@ -1,12 +1,18 @@
+import 'dart:convert';
+import 'package:food_donation_app/controller/notificationController.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/components/InputField.dart';
 import 'package:food_donation_app/components/donationField.dart';
-import 'package:food_donation_app/controller/LocationManager.dart';
-import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/Services/LocationManager.dart';
+import 'package:food_donation_app/Services/Session_manager.dart';
 import 'package:food_donation_app/controller/donationController.dart';
+import 'package:food_donation_app/controller/notification_services.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -29,214 +35,207 @@ class _AddDonationState extends State<AddDonation> {
     productController.dispose();
     qtyController.dispose();
   }
+
   String? dropdownValue;
 
   // final date = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
   DateTime dateRef = DateTime.now();
   final _formKey = GlobalKey<FormState>();
-   String status = 'active';
-   var preprationTime;
+  String status = 'active';
+  var preprationTime;
+  var location ;
+
+  void getUserData() async {
+    var ref = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    setState(() {
+      location = ref['address'];
+    });
+  }
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+ getUserData();
+ print(location);
+
+    super.initState();
+  }
+
+  NotificationServices notify = NotificationServices();
+
   @override
   Widget build(BuildContext context) {
-    // final hours = timeOfDay.hour.toString().padLeft(2, '0');
-    // final minutes = timeOfDay.minute.toString().padLeft(2, '0');
-    final provider = Provider.of<DonationController>(context, listen: true);
+    // final provider = Provider.of<DonationController>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add Donation',
+          'add_donations'.tr,
           style: Heading1.copyWith(fontSize: 24),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: GestureDetector(
-                onTap: () async {
-
-
-                  final TimeOfDay? prepTime = await showTimePicker(
-
-                      context: context, initialTime: timeOfDay);
-                  if (prepTime != null) {
-                    setState(() {
-                      timeOfDay = prepTime;
-                      preprationTime = timeOfDay.hour;
-                      // preprationTime!.format(context);
-                    });
-                    return;
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 18),
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      // border:Border.all(width: 1, color: mainColor)
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Prepration Time:',
-                        style: paragraph.copyWith(color: mainColor),
-                      ),
-                      Text(
-                        '${timeOfDay.hour}:${timeOfDay.minute}',
-                        style:
-                            paragraph.copyWith(fontWeight: FontWeight.bold),
-                      )
-                    ],
+      body: GetBuilder(
+        init: NotificationController(),
+        builder: (controller){
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    final TimeOfDay? prepTime = await showTimePicker(
+                        context: context, initialTime: timeOfDay);
+                    if (prepTime != null) {
+                      setState(() {
+                        timeOfDay = prepTime;
+                        preprationTime = timeOfDay.hour;
+                      });
+                      return;
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 18),
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        // border:Border.all(width: 1, color: mainColor)
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'prep_time'.tr,
+                          style: paragraph.copyWith(color: mainColor),
+                        ),
+                        Text(
+                          '${timeOfDay.hour}:${timeOfDay.minute}',
+                          style: paragraph.copyWith(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 14, right: 14),
-              alignment: Alignment.centerLeft,
-              height: 60,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Colors.grey.shade200),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Row(children: [
-                      Text(
-                        'Food You Prefer :',
-                        style: paragraph.copyWith(fontSize: 16, color: mainColor),
-                      ),
-                    ]),
-                  ),
-                  Expanded(
-
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        items: const [
-                          DropdownMenuItem<String>(
-                              value: 'Veg',
-                              child: Text('Veg',
-                                  style: TextStyle(
-                                      fontSize: 16, color: textColor))),
-                          DropdownMenuItem<String>(
-                              value: 'Non-Veg',
-                              child: Text('Non-Veg',
-                                  style: TextStyle(
-                                      fontSize: 16, color: textColor)))
-                        ],
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
-                        },
-                      ),
+              Container(
+                padding: EdgeInsets.only(left: 14, right: 14),
+                alignment: Alignment.centerLeft,
+                height: 60,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.grey.shade200),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(children: [
+                        Text(
+                          'food_type'.tr,
+                          style:
+                          paragraph.copyWith(fontSize: 16, color: mainColor),
+                        ),
+                      ]),
                     ),
-                  )
-                ],
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: DropdownButton<String>(
+                          value: dropdownValue,
+                          items: const [
+                            DropdownMenuItem<String>(
+                                value: 'Veg',
+                                child: Text('Veg',
+                                    style: TextStyle(
+                                        fontSize: 16, color: textColor))),
+                            DropdownMenuItem<String>(
+                                value: 'Non-Veg',
+                                child: Text('Non-Veg',
+                                    style: TextStyle(
+                                        fontSize: 16, color: textColor)))
+                          ],
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex :2,
-                      child: DonationField(
-                    controller: productController,
-                    keyboardType: TextInputType.text,
-                    validator: (value) {},
-                    label: 'Items',
-                  )),
-                  SizedBox(width: 6,),
-                  Expanded(
-                      child: DonationField(
-                        controller: qtyController,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {},
-                        label: 'Quantity',
-                      ))
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 2,
+                        child: DonationField(
+                          controller: productController,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {},
+                          label: 'item'.tr,
+                        )),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Expanded(
+                        child: DonationField(
+                          controller: qtyController,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {},
+                          label: 'quantity'.tr,
+                        ))
+                  ],
+                ),
               ),
-            )
-
-            // Aligns(
-            //     alignment: Alignment.centerLeft,
-            //     child: Text(
-            //       'Added Items',
-            //       style: Heading3.copyWith(fontSize: 18, color: textColor),
-            //     )),
-            // Expanded(
-            //     child: ListView.builder(
-            //         itemCount: _list.length,
-            //
-            //         // itemCount: provider.list.length,
-            //         itemBuilder: (context, index) {
-            //           // final String? dateTimeRef = _list[index]['date'] +", "+ _list[index]['time'];
-            //           return Padding(
-            //             padding: const EdgeInsets.symmetric(vertical: 4),
-            //             child: ListTile(
-            //               onTap: () {
-            //                 setState(() {
-            //                   _list.removeAt(index);
-            //                 });
-            //               },
-            //               shape: RoundedRectangleBorder(
-            //                   borderRadius: BorderRadius.circular(12)),
-            //               tileColor: Colors.grey.withOpacity(0.1),
-            //               title: Text(
-            //                 _list[index]['product'],
-            //                 style: paragraph.copyWith(
-            //                     color: Colors.green, fontSize: 16),
-            //               ),
-            //               // subtitle: Text(dateTimeRef.toString()),
-            //               trailing: Text(_list[index]['quantity'],
-            //                   style: paragraph.copyWith(fontSize: 16)),
-            //             ),
-            //           );
-            //         })),
-            ,
-            SizedBox(
-              height: 10,
-            ),
-            GradientButton(
-                label: 'Donate',
+              SizedBox(
+                height: 10,
+              ),
+              GradientButton(
+                label: 'donate'.tr,
                 onPress: () {
-                  FirebaseFirestore.instance
-                      .collection('donations')
-                      .add({
-                    'id' : FirebaseAuth.instance.currentUser!.uid,
-                    'donated by': FirebaseAuth.instance.currentUser!.displayName,
-                    'status': status,
-                    'date': dateRef,
-                    'type': dropdownValue,
-                    'prep time': timeOfDay.hour,
-                    "item": productController.text,
-                    'quantity': qtyController.text,
-                    'location': LocationManager().local.toString()
-                  }).then((value) {
-                    Utils.toastMessage("Donation added!", Colors.green);
+                   controller.sendNotification("Restaurent", "item");
 
-                    productController.clear();
-                    qtyController.clear();
-                 }).onError((error, stackTrace){
-                    Utils.toastMessage(error.toString(), Colors.red);
+                      FirebaseFirestore.instance.collection('donations').add({
+                        'id': FirebaseAuth.instance.currentUser!.uid,
+                        'donated by':
+                        FirebaseAuth.instance.currentUser!.displayName,
+                        'status': status,
+                        'date': dateRef,
+                        'type': dropdownValue,
+                        'prep time': timeOfDay.hour,
+                        "item": productController.text,
+                        'quantity': qtyController.text,
+                        'location': location
+                      }).then((value) {
+                        Utils.toastMessage("Donation added!", Colors.green);
+                        // notify.sendNotification(
+                        //     FirebaseAuth.instance.currentUser!.displayName
+                        //         .toString(),
+                        //     productController.text);
 
-                  });
 
-                },
-                loading: provider.loading),
-          
-          ],
-        ),
-      ),
+
+                        productController.clear();
+                        qtyController.clear();
+                      }).onError((error, stackTrace) {
+                        Utils.toastMessage(error.toString(), Colors.red);
+                      });
+
+                    }, loading: false,),
+            ],
+          ),
+        );
+      },),
     );
   }
 

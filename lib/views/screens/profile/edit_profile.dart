@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/components/InputField.dart';
 import 'package:food_donation_app/components/donationField.dart';
-import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/Services/Session_manager.dart';
 import 'package:food_donation_app/controller/profile_controller.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
@@ -61,7 +62,7 @@ class _EditProfileState extends State<EditProfile> {
 
 
         title: Text(
-          'Edit Profile',
+          'edit_profile'.tr,
           style: paragraph.copyWith(
               fontWeight: FontWeight.bold, color: mainColor),
         ),

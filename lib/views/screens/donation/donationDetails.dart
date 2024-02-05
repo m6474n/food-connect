@@ -1,15 +1,50 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:food_donation_app/Services/DestinationController.dart';
+import 'package:food_donation_app/Services/SourceController.dart';
+import 'package:food_donation_app/controller/mappController.dart';
+import 'package:food_donation_app/controller/routeController.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:food_donation_app/views/screens/chat/ChatPage.dart';
 import 'package:food_donation_app/views/screens/map/donationMap.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DonationDetails extends StatefulWidget {
-  const DonationDetails({super.key});
+  final String item, type, serving, donerId, donerName, location;
+
+  final int time;
+  const DonationDetails(
+      {super.key,
+      required this.item,
+      required this.type,
+      required this.serving,
+      required this.time,
+      required this.donerId,
+      required this.donerName,
+      required this.location});
 
   @override
   State<DonationDetails> createState() => _DonationDetailsState();
 }
+
 class _DonationDetailsState extends State<DonationDetails> {
- ValueNotifier<bool> value = ValueNotifier<bool>(true);
+  // ValueNotifier<bool> value = ValueNotifier<bool>(true);
+RouteController controller = Get.put(RouteController());
+  @override
+  void initState() {
+
+
+    // TODO: implement initState
+
+
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,54 +82,93 @@ class _DonationDetailsState extends State<DonationDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-  ReusableRow(title: 'Item:', text: '',),
-                     
+                      ReusableRow(
+                        title: 'Item:',
+                        text: widget.item,
+                      ),
+                      ReusableRow(
+                        title: 'Serving:',
+                        text: widget.serving,
+                      ),
+                      ReusableRow(
+                        title: 'Prep Time:',
+                        text: widget.time.toString(),
+                      ),
+                      SizedBox(
+                        height: 80,
+                      ),
                       Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        height: 50,
+                        child: Row(
                           children: [
-                            Text('Description: ',
-                                style: paragraph.copyWith(
-                                    color: Colors.black87, fontSize: 16)),
-                            Text('                                      '
-                                ' '
-                                '                       '
-                                '                         '
-                                '                          '
-                                '                         '
-                                ''),
-                            SizedBox(height: 30,),
-                            Container(
-                              height: 50,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex:2,
-                                    child: GestureDetector(
-                                      onTap: (){
-                                       // popUp(context);
-                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=> DonationMap()));
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(12)),
-                                        child: Center(child: Text('Get Donation', style: paragraph.copyWith(color: Colors.black87, fontSize: 18),)),
-                                      ),
-                                    ),
-                                  )
-                                  ,SizedBox(width: 30,)
-                                  ,Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(color: mainColor, borderRadius: BorderRadius.circular(12)),
-                                      child: Center(child: Text('Chat',style:paragraph.copyWith(color: Colors.white, fontSize: 18))),
-                                    ),
-                                  )
-                                ],
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print(SourceController().source);
+                                  print(DestinationController().destination);
+                               // controller.addSourceToFirebase();
+                               controller.addDestinationToFirebase();
+                              Get.to(DonationMap());
+
+                                            },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Center(
+                                      child: Text(
+                                    'Get Donation',
+                                    style: paragraph.copyWith(
+                                        color: Colors.black87, fontSize: 18),
+                                  )),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                onTap: () {
+                                 Get.to(ChatPage(
+                                                receiverUserName:
+                                                    widget.donerId,
+                                                receiverUserId:
+                                                    widget.donerName,
+                                              ));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: mainColor,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Center(
+                                      child: Text('Chat',
+                                          style: paragraph.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 18))),
+                                ),
                               ),
                             )
                           ],
                         ),
-                      )
+                      ),
+                      // Container(
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Text('Description: ',
+                      //           style: paragraph.copyWith(
+                      //               color: Colors.black87, fontSize: 16)),
+                      //
+                      //       SizedBox(
+                      //         height: 30,
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -104,41 +178,52 @@ class _DonationDetailsState extends State<DonationDetails> {
         ));
   }
 }
+
 class ReusableRow extends StatelessWidget {
   final String title, text;
-  const ReusableRow({super.key, required this.title, required this.text, });
+  const ReusableRow({
+    super.key,
+    required this.title,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Row(
         children: [
-          Expanded(child: Container(
+          Expanded(
+              child: Container(
             alignment: Alignment.centerLeft,
             child: Text(
               title,
-              style: paragraph.copyWith(
-                  color: Colors.black87, fontSize: 16),
-            ),)),
-          Expanded(child: Container(
+              style: paragraph.copyWith(color: Colors.black87, fontSize: 16),
+            ),
+          )),
+          Expanded(
+              child: Container(
             alignment: Alignment.centerRight,
-            child: Text(text,style: paragraph.copyWith(
-                color: Colors.black87, fontSize: 16),),)),
+            child: Text(
+              text,
+              style: paragraph.copyWith(color: Colors.black87, fontSize: 16),
+            ),
+          )),
         ],
       ),
     );
   }
 }
 
-Future<void> popUp(BuildContext context){
-  return showDialog(context: context, builder: (context){
-    return AlertDialog(
-      content: Container(
-        height: 500,
-        width: double.infinity,
-        decoration: BoxDecoration(color: Colors.white),
-      ),
-    );
-  });
-
+Future<void> popUp(BuildContext context) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            height: 500,
+            width: double.infinity,
+            decoration: BoxDecoration(color: Colors.white),
+          ),
+        );
+      });
 }

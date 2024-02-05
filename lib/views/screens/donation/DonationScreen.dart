@@ -3,16 +3,21 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/components/InputField.dart';
 import 'package:food_donation_app/components/card.dart';
-import 'package:food_donation_app/controller/Role_manager.dart';
-import 'package:food_donation_app/controller/Session_manager.dart';
+import 'package:food_donation_app/Services/Role_manager.dart';
+import 'package:food_donation_app/Services/Session_manager.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/routes/routes.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/donation/addDonation.dart';
 import 'package:food_donation_app/views/screens/donation/donationDetails.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class DonationScreen extends StatefulWidget {
@@ -60,7 +65,7 @@ class _DonationScreenState extends State<DonationScreen> {
           automaticallyImplyLeading: false,
           title: Center(
               child: Text(
-            'Donations',
+            'donations'.tr,
             style: Heading1.copyWith(fontSize: 24),
           )),
         ),
@@ -102,7 +107,16 @@ class _DonationScreenState extends State<DonationScreen> {
                             : snapshot.data!.docs[index]['prep time'],
                         address: snapshot.data!.docs[index]['location'],
                         status: snapshot.data!.docs[index]['status'],
-                        onTap: () {}, type:  snapshot.data!.docs[index]['status'],
+                        onTap: () async{
+                          print( snapshot.data!.docs[index]['location']);
+                          var address = snapshot.data!.docs[index]['location'];
+                          var local = await locationFromAddress(address);
+                          var dest= LatLng(local.last.latitude, local.last.longitude);
+                          DestinationController().destination = dest;
+
+
+
+                        }, type:  snapshot.data!.docs[index]['status'],
                       );
                     }),
               );
@@ -112,10 +126,7 @@ class _DonationScreenState extends State<DonationScreen> {
         floatingActionButton: RoleController().role == 'Restaurant'
             ? FloatingActionButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddDonation()));
+                 Get.to(AddDonation());
                 },
                 child: Icon(
                   Icons.add,

@@ -9,8 +9,10 @@ import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/routes/routes.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/utility/utils.dart';
+import 'package:food_donation_app/views/screens/authentication/forget_pass.dart';
+import 'package:food_donation_app/views/screens/authentication/register.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -63,11 +65,11 @@ late  bool _passVisible = false;
                   height: 18,
                 ),
                 Text(
-                  'Welcome back!',
+                  'welcome_back'.tr+"!",
                   style: Heading1.copyWith(color: mainColor),
                 ),
                 Text(
-                  'Login to your account',
+                  'login_to_your_account'.tr,
                   style: paragraph,
                 ),
                 const SizedBox(
@@ -79,13 +81,13 @@ late  bool _passVisible = false;
                           child: Column(
                             children: [
                               InputField(
-                                label: 'Email',
+                                label: 'email'.tr,
                                 keyboardType: TextInputType.emailAddress,
                                 controller: emailController,
                                 focusNode: emailNode,
                                 icon: Icons.mail,
                                 validator: (value) {
-                                  return value.isEmpty ? 'Enter Email' : null;
+                                  return value.isEmpty ? 'enter_email'.tr : null;
                                 },
                               ),
 
@@ -99,10 +101,10 @@ late  bool _passVisible = false;
                                   focusNode: passNode,
                                   validator: (value) {
                                     return value.isEmpty
-                                        ? 'Enter Password'
+                                        ? 'enter_password'.tr
                                         : null;
                                   },
-                                  label: 'Password',
+                                  label: 'password'.tr,
                                   keyboardType: TextInputType.visiblePassword,
                                  
                                 ),
@@ -111,11 +113,10 @@ late  bool _passVisible = false;
                                   alignment: Alignment.centerRight,
                                   child: TextButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, RouteName.loginScreen);
+                                       Get.to(ForgetPassScreen());
                                       },
                                       child: Text(
-                                        "Forget Password ?",
+                                        "forget_password".tr,
                                         style: paragraph.copyWith(
                                             color: mainColor),
                                       )),
@@ -125,7 +126,7 @@ late  bool _passVisible = false;
                                   height: 32,
                                 ),
                                 GradientButton(
-                                    label: 'Login',
+                                    label: 'login'.tr,
                                     onPress: () {
                                       if (_formKey.currentState!.validate()) {
                                         return provider.Login(
@@ -222,16 +223,15 @@ late  bool _passVisible = false;
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account?",
+                        "don't_have_an_account?".tr,
                         style: paragraph,
                       ),
                       TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, RouteName.registerScreen);
-                          },
+                    Get.to(RegisterScreen());
+                    },
                           child: Text(
-                            "Register.",
+                            "register".tr,
                             style: paragraph.copyWith(color: mainColor),
                           ))
                     ],

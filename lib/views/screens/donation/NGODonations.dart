@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_donation_app/components/card.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/donation/donationDetails.dart';
+import 'package:get/get.dart';
 
 class NGODonationScreen extends StatefulWidget {
   const NGODonationScreen({super.key});
@@ -19,7 +20,7 @@ class _NGODonationScreenState extends State<NGODonationScreen> {
         automaticallyImplyLeading: false,
         title: Center(
             child: Text(
-          'All Donations',
+          'all_donations'.tr,
           style: Heading1.copyWith(fontSize: 24),
         )),
       ),
@@ -48,27 +49,44 @@ class _NGODonationScreenState extends State<NGODonationScreen> {
             if (snapshot.data.docs.isEmpty) {
               return Center(
                   child: Text(
-                    'No donation available',
-                    style: paragraph,
-                  ));
+                'No donation available',
+                style: paragraph,
+              ));
             }
 
             return ListView.builder(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   return DonationCard(
-                      item: snapshot.data!.docs[index]['item'],
-                      quantity: snapshot.data!.docs[index]['quantity'],
-                      restaurentName: snapshot.data!.docs[index]['donated by'],
-                      time: snapshot.data!.docs[index]['prep time'],
-                      address: snapshot.data!.docs[index]['location'],
-                      status: snapshot.data!.docs[index]['status'],
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DonationDetails()));
-                      }, type:  snapshot.data!.docs[index]['type'],);
+                    item: snapshot.data!.docs[index]['item'],
+                    quantity: snapshot.data!.docs[index]['quantity'],
+                    restaurentName: snapshot.data!.docs[index]['donated by'],
+                    time: snapshot.data!.docs[index]['prep time'],
+                    address: snapshot.data!.docs[index]['location'],
+                    status: snapshot.data!.docs[index]['status'],
+                    onTap: () {
+                    Get.to(DonationDetails(
+                                item: snapshot.data
+                                    .docs[index]['item'],
+                                type: snapshot.data
+                                    .docs[index]['type'],
+                                serving: snapshot
+                                    .data.docs[index]
+                                ['quantity'],
+                                time: snapshot
+                                    .data.docs[index]
+                                ['prep time'],
+                                donerId: snapshot.data
+                                    .docs[index]['id'],
+                                donerName: snapshot
+                                    .data.docs[index]
+                                ['donated by'], location: snapshot
+                                  .data.docs[index]
+                              ['location'],
+                                  ));
+                    },
+                    type: snapshot.data!.docs[index]['type'],
+                  );
                 });
           },
         ),

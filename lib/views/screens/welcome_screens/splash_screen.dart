@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_donation_app/controller/splash_services.dart';
+import 'package:food_donation_app/Services/splash_services.dart';
 import 'package:food_donation_app/utility/constants.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -1,18 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:food_donation_app/utility/utils.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationController extends ChangeNotifier {
+
   final auth = FirebaseAuth.instance;
   final dbRef = FirebaseFirestore.instance.collection('Users');
   final makerRef = FirebaseFirestore.instance.collection('markers');
 
+
+
+
   bool _loading = false;
   bool get Loading => _loading;
-String _address = 'Current Address';
+  String _address = 'current_address'.tr;
   String get Address => _address;
   double? _long;
   double? get Longitude => _long;
@@ -47,6 +54,7 @@ String _address = 'Current Address';
 
 void getCurrentLocation(){
     determinePosition().then((value)async {
+
       List<Placemark> placemark = await placemarkFromCoordinates(
           value.latitude, value.longitude);
       _long = value.longitude;
@@ -54,13 +62,22 @@ void getCurrentLocation(){
       _address = '${placemark.reversed.last.street}, ${placemark.reversed.last.administrativeArea}';
 
       UpdateLocation(_address, _long, _lat);
-notifyListeners();
+      notifyListeners();
     })
        ;
 
 
 
+
+
+
 }
+
+
+
+
+
+
   void UpdateLocation(address, longitude, latitude) {
     setLoading(true);
     dbRef.doc(auth.currentUser!.uid).update({
@@ -86,5 +103,8 @@ notifyListeners();
       Utils.toastMessage(error.toString(), Colors.red);
     });
   }
+
+
+
 
 }

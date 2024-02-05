@@ -8,7 +8,9 @@ import 'package:food_donation_app/controller/LocationController.dart';
 import 'package:food_donation_app/controller/profile_controller.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CompleteProfile extends StatefulWidget {
@@ -50,7 +52,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Complete Profile',
+          'complete_profile'.tr,
           style: paragraph.copyWith(color: mainColor, fontSize: 20),
         ),
       ),
@@ -118,7 +120,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   child: TextFormField(
                     controller: phoneController,
                     decoration: InputDecoration(
-                        hintText: 'Phone',
+                        hintText: 'phone'.tr,
                         hintStyle: paragraph,
                         fillColor: Colors.grey.shade100,
                         filled: true,
@@ -160,7 +162,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                           Expanded(
                             child: Row(children: [
                               Text(
-                                'Food You Prefer :',
+                                'food_you_prefer'.tr,
                                 style: paragraph.copyWith(fontSize: 16),
                               ),
                             ]),
@@ -199,13 +201,13 @@ class _CompleteProfileState extends State<CompleteProfile> {
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: GradientButton(
-                label: 'Update',
+                label: 'update'.tr,
                 onPress: () {
                   provider.uploadImage(context);
                   provider.completeUserProfile(phoneController.text,
                       locationProvider.Address, dropdownValue);
-                  Navigator.pushNamed(context, RouteName.dashboard
-);              },
+                 Get.to(DashboardScreen());
+                      },
                 loading: provider.Loading),
           ),
         ],

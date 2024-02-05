@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
+
 
 class NotificationServices {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -36,13 +40,12 @@ class NotificationServices {
         print(message.notification!.title.toString());
         print(message.notification!.body.toString());
       }
-
+initLocalNotification(message);
       showNotification(message);
     });
   }
 
-  void initLocalNotification(
-      BuildContext context, RemoteMessage message) async {
+  void initLocalNotification(RemoteMessage message) async {
     var androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosInitializationSettings = DarwinInitializationSettings();
@@ -79,13 +82,13 @@ class NotificationServices {
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
 
 
-    Future.delayed(Duration.zero, () {
+
       _flutterLocalNotificationsPlugin.show(
           1,
           message.notification!.title.toString(),
           message.notification!.body.toString(),
           notificationDetails);
-    });
+
   }
 
   Future getDeviceToken() async {
@@ -98,4 +101,14 @@ class NotificationServices {
       return print(event.toString());
     });
   }
+
+
+
+
+
+
+
+
+
+
 }

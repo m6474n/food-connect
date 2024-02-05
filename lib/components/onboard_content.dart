@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_donation_app/utility/constants.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -72,7 +73,7 @@ class OnBoardContent extends StatelessWidget {
                                   child: TextButton(
                                     onPressed: onPressPrevious,
                                     child: Text(
-                                      'Previous',
+                                      'previous'.tr,
                                       style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           color: Colors.grey,
@@ -99,7 +100,7 @@ class OnBoardContent extends StatelessWidget {
                                   child: TextButton(
                                     onPressed: onPressNext,
                                     child: Text(
-                                      'Next',
+                                      'next'.tr,
                                       style: GoogleFonts.poppins(
                                         fontSize: 16,
                                         color: mainColor,
