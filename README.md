@@ -8,20 +8,24 @@ A revolutionary app designed to create a meaningful connection between restauran
   - Manage all the users( Add, remove and update)
   - Manage Donations.
 
-
 - Restaurent
   - List new donations
   - Manage their profile.
   - Chat with NGOs
   - Update their location
-     
-
 
 - NGO
   - Manage thier Profile
   - See and Get donations from all the available Restaurants
   - Chat with Restaurents
   - Track the real time location of donation
+
+- Screens
+  - Home Screen
+  - Map Screen
+  - Donation Screen
+  - Chat Screen
+  - Profile Screen
     
 ## Getting Started
 
