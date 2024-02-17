@@ -62,8 +62,15 @@ String? address;
               newAddress =
               '${_placemark.reversed.last.street.toString()}, ${_placemark.reversed.last.administrativeArea.toString()}';
 
-          address = newAddress;
-          addMarker(lat, long);
+              dbRef.doc(auth.currentUser!.uid).update({
+                'address': newAddress,
+                'longitude': position.longitude,
+                'latitude': position.latitude
+              }).then((value) {
+                addMarker(lat, long);
+              }).onError((error, stackTrace){
+                Get.snackbar(error.toString(),'', backgroundColor: Colors.red);
+              });
 
 update();
             },

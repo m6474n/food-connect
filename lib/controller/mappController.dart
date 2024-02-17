@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/Services/SourceController.dart';
-import 'package:food_donation_app/controller/LocationController.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 import 'package:food_donation_app/Services/LocationManager.dart';
 import 'package:food_donation_app/controller/routeController.dart';
 import 'package:http/http.dart' as http;
@@ -26,12 +27,15 @@ class MapController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   bool startTraveling = false;
 
+  bool isRouteStarted = false;
+  bool isDonationPicked = false;
+
 //
   Position? currentLocation;
 
 //
   List<Marker> points = [
-    // Marker(markerId: MarkerId('Source'),position: LatLng(SourceController().source!.latitude,SourceController().source!.longitude), infoWindow: InfoWindow(title: 'Source')),
+    Marker(markerId: MarkerId('Source'),position: LatLng(SourceController().source!.latitude,SourceController().source!.longitude), infoWindow: InfoWindow(title: 'Source')),
     Marker(markerId: MarkerId('2'),position: DestinationController().destination!  ,infoWindow: InfoWindow(title: 'Destination'))
 
   ];
@@ -195,7 +199,10 @@ PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
   }
 
   @override
-  void onInit() {
+  void onInit()
+  {
+    moveToCurrentLocation();
+    getPolyPoints();
 
 // getPolyPoints();
      // Get.find<RouteController>().getSource();
@@ -220,6 +227,7 @@ RouteController  route = Get.put(RouteController());
           .animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
       points.add(Marker(
           markerId: const MarkerId('1'),
+        icon:  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
           position: LatLng(_newPosition.latitude, _newPosition.longitude),
           infoWindow: const InfoWindow(title: 'My Location')));
       update();
@@ -260,4 +268,37 @@ RouteController  route = Get.put(RouteController());
   //
   //   update();
   // }
+
+getRating(BuildContext context){
+  RatingBar.builder(
+    initialRating: 3,
+    minRating: 1,
+    direction: Axis.horizontal,
+    allowHalfRating: true,
+    itemCount: 5,
+    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+    itemBuilder: (context, _) => Icon(
+      Icons.star,
+      color: Colors.amber,
+    ),
+    onRatingUpdate: (rating) {
+      print(rating);
+    },
+  );
+
+update();
+}
+
+
+
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+  searchController.dispose();
+  completer.complete();
+
+  }
+
 }

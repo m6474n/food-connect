@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/Services/SourceController.dart';
 import 'package:food_donation_app/controller/mappController.dart';
@@ -14,18 +15,19 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DonationDetails extends StatefulWidget {
-  final String item, type, serving, donerId, donerName, location;
+  final String item, type, serving, donerId, donerName, id;
 
   final int time;
   const DonationDetails(
       {super.key,
       required this.item,
+
       required this.type,
       required this.serving,
       required this.time,
       required this.donerId,
-      required this.donerName,
-      required this.location});
+      required this.donerName, required this.id,
+      });
 
   @override
   State<DonationDetails> createState() => _DonationDetailsState();
@@ -35,15 +37,6 @@ class _DonationDetailsState extends State<DonationDetails> {
   // ValueNotifier<bool> value = ValueNotifier<bool>(true);
 RouteController controller = Get.put(RouteController());
   @override
-  void initState() {
-
-
-    // TODO: implement initState
-
-
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +102,12 @@ RouteController controller = Get.put(RouteController());
                                   print(DestinationController().destination);
                                // controller.addSourceToFirebase();
                                controller.addDestinationToFirebase();
-                              Get.to(DonationMap());
+                              Get.to(()=>DonationMap(id: "widget.id",));
 
-                                            },
+                                  print(widget.id);
+
+
+                              },
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey.shade200,
@@ -154,21 +150,7 @@ RouteController controller = Get.put(RouteController());
                           ],
                         ),
                       ),
-                      // Container(
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Text('Description: ',
-                      //           style: paragraph.copyWith(
-                      //               color: Colors.black87, fontSize: 16)),
-                      //
-                      //       SizedBox(
-                      //         height: 30,
-                      //       ),
-                      //
-                      //     ],
-                      //   ),
-                      // )
+
                     ],
                   ),
                 ),

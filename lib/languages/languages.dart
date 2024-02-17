@@ -4,6 +4,7 @@ class Languages extends Translations{
   @override
   Map<String , Map<String, String>> get keys=>{
     'en_US': {
+      "no_active_donation_available":"No active donation available",
       "previous": "Previous",
       "next": "Next",
       "no_food_waste!": "No Food Waste!",
@@ -66,13 +67,16 @@ class Languages extends Translations{
       "quantity":"Quantity",
       "food_you_prefer":"Food you prefer"
       ,"complete_profile": "Complete Profile",
-      "message":"Message"
+      "message":"Message",
+      "something_went_wrong":"Something went wrong"
 
     },
     'ur_PK':{
+      "something_went_wrong":"کچھ غلط ہو گیا",
+      "no_active_donation_available": "کوئی فعال عطیہ دستیاب نہیں ہے۔",
       "previous": "پچھلا",
       "next": "اگلے",
-  "message":"پیغام",
+      "message":"پیغام",
       "complete_profile": "اپنا پروفائل مکمل کریں۔",
       "current_address":"موجودہ پتہ",
       "no_food_waste!": "خوراک کا ضیاع نہیں!",

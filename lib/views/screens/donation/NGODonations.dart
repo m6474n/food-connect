@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/components/card.dart';
 import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/donation/donationDetails.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class NGODonationScreen extends StatefulWidget {
   const NGODonationScreen({super.key});
@@ -62,10 +64,14 @@ class _NGODonationScreenState extends State<NGODonationScreen> {
                     quantity: snapshot.data!.docs[index]['quantity'],
                     restaurentName: snapshot.data!.docs[index]['donated by'],
                     time: snapshot.data!.docs[index]['prep time'],
-                    address: snapshot.data!.docs[index]['location'],
                     status: snapshot.data!.docs[index]['status'],
                     onTap: () {
+
+                      DestinationController().destination =
+                          LatLng(snapshot.data.docs[index]['lat'],
+                            snapshot.data.docs[index]['long']);
                     Get.to(DonationDetails(
+                      id: snapshot.data.docs[index].id,
                                 item: snapshot.data
                                     .docs[index]['item'],
                                 type: snapshot.data
@@ -80,13 +86,12 @@ class _NGODonationScreenState extends State<NGODonationScreen> {
                                     .docs[index]['id'],
                                 donerName: snapshot
                                     .data.docs[index]
-                                ['donated by'], location: snapshot
-                                  .data.docs[index]
-                              ['location'],
+                                ['donated by'],
                                   ));
                     },
                     type: snapshot.data!.docs[index]['type'],
                   );
+
                 });
           },
         ),

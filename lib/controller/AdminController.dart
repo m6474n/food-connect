@@ -26,15 +26,16 @@ class AdminController extends GetxController {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 var id = snapshot.data!.docs[index]['id'];
-                return ListTile(
-                  onTap: (){
 
+                return snapshot.data!.docs[index]['isDeleted'] != true?ListTile(
+                  onTap: (){
+                    deleteUser(id);
                   },
                   leading: CircleAvatar(),
                   title: Text('Name'),
                   subtitle: Text('Email'),
                   trailing: Text('Role'),
-                );
+                ):Container();
               });
         });
   }
@@ -59,7 +60,7 @@ class AdminController extends GetxController {
                     quantity: "quantity",
                     restaurentName: "restaurentName",
                     time: 12,
-                    address: "address",
+
                     status: "status",
                     onTap: () {},
                     type: "Veg");
@@ -67,8 +68,11 @@ class AdminController extends GetxController {
         });
   }
 
-  deleteUser(){
-    FirebaseFirestore.instance.collection('Users');
+  deleteUser(String id)async{
+   await FirebaseFirestore.instance.collection('Users').doc(id).update({
+     'isDeleted': true
+   });
+   update();
   }
 
 

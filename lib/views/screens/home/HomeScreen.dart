@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/Services/SourceController.dart';
+import 'package:food_donation_app/controller/donationController.dart';
 import 'package:food_donation_app/utility/Language.dart';
 import 'package:food_donation_app/views/screens/authentication/login.dart';
 import 'package:food_donation_app/views/screens/donation/addDonation.dart';
@@ -108,7 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
     getCurrentLocation().then((value) {
       SourceController().source = LatLng(value.latitude, value.longitude);
     });
+
     super.initState();
+
+
   }
 
   _changeLanguage(Language language) {
@@ -116,6 +120,8 @@ Get.updateLocale(Locale(language.languageCode));
 
 
   }
+
+  final  donationController = Get.put(DonationController());
 
   @override
   Widget build(BuildContext context) {
@@ -128,10 +134,10 @@ Get.updateLocale(Locale(language.languageCode));
         appBar: AppBar(
           leading: GestureDetector(
               onTap: () {
-                setState(() {});
-                getCurrentLocation().then((value) {
-                  location = value.toString();
-                });
+                // setState(() {});
+                // getCurrentLocation().then((value) {
+                //   location = value.toString();
+                // });
               },
               child: Icon(
                 Icons.location_on,
@@ -276,70 +282,7 @@ Get.updateLocale(Locale(language.languageCode));
 
             Expanded(
               child: RoleController().role == 'Restaurant'
-                  ? StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('donations')
-                          .where('id',
-                              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        if (!snapshot.hasData) {
-                          return Center(child: Text('Something went wrong'));
-                        }
-                        if (snapshot.data.docs.isEmpty) {
-                          return Center(
-                              child: Text(
-                            'No active donation available',
-                            style: paragraph,
-                          ));
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                return DonationCard(
-                                  item: snapshot.data!.docs[index]['item'],
-                                  quantity: snapshot.data!.docs[index]
-                                      ['quantity'],
-                                  restaurentName: snapshot.data!.docs[index]
-                                      ['donated by'],
-                                  time: snapshot.data!.docs[index]
-                                              ['prep time'] ==
-                                          null
-                                      ? ""
-                                      : snapshot.data!.docs[index]['prep time'],
-                                  address: snapshot.data.docs[index]
-                                      ['location'],
-                                  status: snapshot.data.docs[index]['status'],
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            content: Container(
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    child: Text('Delete'),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  type: snapshot.data.docs[index]['type'],
-                                );
-                              }),
-                        );
-                      },
-                    )
+                  ? donationController.getDonations()
                   : StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('donations')
@@ -355,12 +298,12 @@ Get.updateLocale(Locale(language.languageCode));
                           ));
                         }
                         if (!snapshot.hasData) {
-                          return Center(child: Text('Something went wrong'));
+                          return Center(child: Text('something_went_wrong'.tr));
                         }
                         if (snapshot.data.docs.isEmpty) {
                           return Center(
                               child: Text(
-                            'No active donation available',
+                            'no_active_donation_available'.tr,
                             style: paragraph,
                           ));
                         }
@@ -381,19 +324,12 @@ Get.updateLocale(Locale(language.languageCode));
                                           null
                                       ? ""
                                       : snapshot.data!.docs[index]['prep time'],
-                                  address: snapshot.data.docs[index]
-                                      ['location'],
+
                                   status: snapshot.data.docs[index]['status'],
                                   onTap: () async {
-                                    print(
-                                        snapshot.data!.docs[index]['location']);
-                                    var address =
-                                        snapshot.data!.docs[index]['location'];
-                                    var local =
-                                        await locationFromAddress(address);
                                     DestinationController().destination =
-                                        LatLng(local.first.latitude,
-                                            local.first.longitude);
+                                        LatLng(snapshot.data.docs[index]['lat'],
+                                            snapshot.data.docs[index]['long']);
 
                                     print(SourceController().source);
                                     print(DestinationController().destination);
@@ -406,11 +342,10 @@ Get.updateLocale(Locale(language.languageCode));
                                         time: snapshot.data.docs[index]
                                             ['prep time'],
                                         donerId: snapshot.data.docs[index]
-                                            ['donated by'],
+                                            ['donor_Id'],
                                         donerName: snapshot.data.docs[index]
-                                            ['id'],
-                                        location: snapshot.data.docs[index]
-                                            ['location']));
+                                            ['donated by'], id: snapshot.data.docs[index].id,
+                                    ));
                                   },
                                   type: snapshot.data!.docs[index]['type'],
                                 );

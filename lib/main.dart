@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_donation_app/Services/Chat_services.dart';
@@ -23,6 +24,7 @@ import 'package:food_donation_app/utility/constants.dart';
 import 'package:food_donation_app/views/screens/authentication/emailValidation.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:food_donation_app/views/screens/map/donationMap.dart';
+
 import 'package:food_donation_app/views/screens/welcome_screens/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl_standalone.dart';
@@ -50,10 +52,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => LocationController()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
-        // ChangeNotifierProvider(create: (_)=> ChatRoomController()),
-        ChangeNotifierProvider(create: (_) => DonationController()),
-        // ChangeNotifierProvider(create: (_)=> MapController()),
-        // ChangeNotifierProvider(create: (_)=> ChatController()),
 
       // ChangeNotifierProvider(create: create)
 
@@ -83,6 +81,7 @@ class MyApp extends StatelessWidget {
         }
         return supportedLocales.first;
       },
+      builder: EasyLoading.init(),
       title: 'Food Connect',
       theme: ThemeData(
         indicatorColor: mainColor,
