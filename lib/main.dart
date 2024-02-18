@@ -68,9 +68,6 @@ class MyApp extends StatelessWidget {
       supportedLocales: [
          Locale('ur','PK'),
         Locale("en", "US"),
-        Locale("fa", "IR"),
-        Locale("ar", "SA"),
-        Locale("hi", "IN")
       ],
       localeResolutionCallback: (locale, supportedLocales) {
         for (var supportedLocale in supportedLocales) {
