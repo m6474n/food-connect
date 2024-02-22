@@ -19,7 +19,9 @@ class AdminController extends GetxController {
 }
 getUserList(){
   return StreamBuilder(stream: FirebaseFirestore.instance.collection("Users").snapshots(), builder: (context, snapshot){
-
+      if(snapshot.connectionState == ConnectionState.waiting){
+        return CircularProgressIndicator(color: Colors.white,);
+      }
     return  Text(
       "${snapshot.data!.docs.length -1}",
       style: paragraph.copyWith(
@@ -33,6 +35,9 @@ getUserList(){
 
 getDonationList(){
     return StreamBuilder(stream: FirebaseFirestore.instance.collection("donations").snapshots(), builder: (context, snapshot){
+      if(snapshot.connectionState == ConnectionState.waiting){
+        return CircularProgressIndicator(color: Colors.white,);
+      }
       return  Text(
        snapshot.data!.docs.length.toString(),
         style: paragraph.copyWith(
@@ -51,7 +56,7 @@ getDonationList(){
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: mainColor,),
             );
           }
           if (!snapshot.hasData) {
@@ -116,7 +121,7 @@ getDonationList(){
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: mainColor,),
             );
           }
           if (!snapshot.hasData) {
@@ -189,7 +194,7 @@ getDonationList(){
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: mainColor,),
             );
           }
           if (!snapshot.hasData) {

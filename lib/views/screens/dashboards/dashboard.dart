@@ -21,6 +21,7 @@ import 'package:food_donation_app/views/screens/Profile/ProfileScreen.dart';
 import 'package:food_donation_app/views/screens/donation/NGODonations.dart';
 import 'package:food_donation_app/views/screens/home/HomeScreen.dart';
 import 'package:food_donation_app/views/screens/map/MapScreen.dart';
+import 'package:food_donation_app/views/screens/profile/profile_screen.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';

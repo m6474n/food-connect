@@ -1,11 +1,16 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/Services/SourceController.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:food_donation_app/Services/LocationManager.dart';
 import 'package:food_donation_app/controller/routeController.dart';
+import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -19,6 +24,9 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:uuid/uuid.dart';
+
+import '../components/GradientButton.dart';
+import '../utility/constants.dart';
 
 class MapController extends GetxController {
   final Completer<GoogleMapController> completer = Completer();
@@ -215,6 +223,7 @@ RouteController  route = Get.put(RouteController());
   // Move camera location
   updateCameraLocation() {
     Geolocator.getPositionStream().listen((Position _newPosition) async {
+
       currentLocation = _newPosition;
       CameraPosition newCameraPosition = CameraPosition(
           target: LatLng(
@@ -269,25 +278,70 @@ RouteController  route = Get.put(RouteController());
   //   update();
   // }
 
-getRating(BuildContext context){
-  RatingBar.builder(
-    initialRating: 3,
-    minRating: 1,
-    direction: Axis.horizontal,
-    allowHalfRating: true,
-    itemCount: 5,
-    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-    itemBuilder: (context, _) => Icon(
-      Icons.star,
-      color: Colors.amber,
-    ),
-    onRatingUpdate: (rating) {
-      print(rating);
-    },
-  );
+  //// Reviews
 
-update();
-}
+  getReviews(BuildContext context,String id,String restaurantId, String restaurantName){
+    double rating = 0.0;
+
+    return showDialog(context: context, builder: (_){
+      return AlertDialog(
+          title: Text('Review Donation', style: paragraph.copyWith(color: mainColor, fontSize: 20, fontWeight: FontWeight.bold),),
+          content: Container(height: 120,child: Column(children: [
+            RatingBar.builder(
+              initialRating: rating,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemSize: 40.0,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (value) {
+
+                rating = value;
+                update();
+              },
+            ),
+            SizedBox(height: 20),
+            GradientButton(label: "Submit", onPress: (){
+
+              storeReview(restaurantId, rating, restaurantName);
+              updateDonationStatus(id);
+              Get.to(()=>DashboardScreen());
+              Get.delete<MapController>();
+            }, loading: false)
+          ],),)
+
+      );
+    });
+  }
+
+  // Store review to firebase
+
+  storeReview(String id,double rating, String restaurant ){
+    FirebaseFirestore.instance.collection('reviews').add({
+      "rating": rating.toString(),
+      "id": id,
+      "from": FirebaseAuth.instance.currentUser!.displayName.toString(),
+      "to": restaurant
+
+    }).then((value) {
+      EasyLoading.showSuccess("Submitted",);
+    });
+    update();
+  }
+  updateDonationStatus(String id){
+    FirebaseFirestore.instance.collection("donations").doc(id).update({
+      "status": "completed"
+    });
+  }
+
+
+
+
 
 
 

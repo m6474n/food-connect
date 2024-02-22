@@ -6,6 +6,7 @@ import 'package:food_donation_app/controller/notification_services.dart';
 import 'package:food_donation_app/routes/route_name.dart';
 import 'package:food_donation_app/utility/utils.dart';
 import 'package:food_donation_app/views/screens/authentication/forget_pass.dart';
+import 'package:food_donation_app/views/screens/authentication/login.dart';
 import 'package:food_donation_app/views/screens/dashboards/dashboard.dart';
 import 'package:food_donation_app/views/screens/profile/complete_profile.dart';
 import 'package:get/get.dart';
@@ -32,11 +33,22 @@ class LoginProvider with ChangeNotifier {
       email: email,
       password: password,
     )
-        .then((value) {
+        .then((value) async{
+          DocumentSnapshot ref = await FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.uid).get();
+         if(ref.exists){
+           setLoading(false);
+           Utils.toastMessage("Login Successfully", Colors.green);
+           Get.to(DashboardScreen());
+         }
+         else{
+           setLoading(false);
+           Utils.toastMessage("User deleted by Admin!", Colors.green);
+          auth.signOut().then((value) {
+            Get.to(LoginScreen());
+          });
+         }
 
-          setLoading(false);
-          Utils.toastMessage("Login Successfully", Colors.green);
-     Get.to(DashboardScreen());
+
     }).catchError((e) {
       Utils.toastMessage(e.toString(), Colors.green);
     }).whenComplete(() {

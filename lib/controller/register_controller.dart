@@ -41,6 +41,7 @@ class RegisterProvider with ChangeNotifier{
         'phone' : '',
         'image': '',
         'address': '',
+        "isDeleted": false,
         'pass': password,
         'isVerified': "Not"
       });

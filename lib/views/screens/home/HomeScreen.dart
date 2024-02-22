@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:food_donation_app/Services/DestinationController.dart';
 import 'package:food_donation_app/Services/SourceController.dart';
+import 'package:food_donation_app/components/GradientButton.dart';
 import 'package:food_donation_app/controller/donationController.dart';
 import 'package:food_donation_app/utility/Language.dart';
 import 'package:food_donation_app/views/screens/authentication/login.dart';
@@ -243,13 +244,20 @@ Get.updateLocale(Locale(language.languageCode));
                 ],
                 options: CarouselOptions(
                     autoPlay: true, aspectRatio: 2.0, enlargeCenterPage: true)),
-            SizedBox(
-              height: 18,
-            ),
+
             // Container(
             //   height: 120,
             //   color: Colors.black87,
             // ),
+
+            RoleController().role == "Restaurant"?
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18,horizontal: 38.0),
+              child: GradientButton(label: "Donate", onPress: (){
+                Get.to(()=> AddDonation());
+              }, loading: false),
+            ):Container(),
+
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               height: 20,

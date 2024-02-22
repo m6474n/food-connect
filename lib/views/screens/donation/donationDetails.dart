@@ -102,7 +102,7 @@ RouteController controller = Get.put(RouteController());
                                   print(DestinationController().destination);
                                // controller.addSourceToFirebase();
                                controller.addDestinationToFirebase();
-                              Get.to(()=>DonationMap(id: "widget.id",));
+                              Get.to(()=>DonationMap(id: widget.id,restaurantId: widget.donerId,restaurantName: widget.donerName,));
 
                                   print(widget.id);
 
