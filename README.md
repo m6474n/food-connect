@@ -1,6 +1,15 @@
+![Logo](https://raw.githubusercontent.com/m6474n/food-connect/refs/heads/main/asset/banner.jpg)
+
+
 # Food Connect
 
 A revolutionary app designed to create a meaningful connection between restaurants, hotels, and compassionate individuals, all working together to combat food wastage and alleviate hunger in our communities.
+
+
+## Screenshots
+
+![App Screenshot](https://raw.githubusercontent.com/m6474n/food-connect/refs/heads/main/asset/screenshots.jpg)
+
 
 ## Table of Contents
 - [Overview](#overview)
